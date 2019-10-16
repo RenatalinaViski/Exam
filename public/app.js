@@ -18,4 +18,11 @@ button.onclick = () => {
         },
         body: JSON.stringify({name:valueInput})
     })
+    setTimeout(()=>{
+        fetch('/users')
+    .then(data=>{
+        console.log(data)
+    })
+    },2000)
+    
 }
