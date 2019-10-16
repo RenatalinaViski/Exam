@@ -20,6 +20,9 @@ button.onclick = () => {
     })
     setTimeout(()=>{
         fetch('/users')
+    .then(responce=>{
+        return responce.json()
+    })
     .then(data=>{
         console.log(data)
     })
