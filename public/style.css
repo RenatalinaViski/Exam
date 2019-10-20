@@ -1,9 +1,34 @@
-.br-black{
+/* img{
+    width: 200px;
+    height: 200px;
+} */
+
+body{
+    width: 100%;
+    height: 100%;
+    display: flex;  
+    flex-flow: row;
+    align-items: center;
+    justify-content: center;  
+    /* background-image: url('./img/morskoiboi.jpg');
+    background-repeat: no-repeat;*/
+    background-color: rgb(78, 76, 76); 
+  
+    
+}
+.mr-3{
+    margin-right: 3rem;
+}
+.tr{
+    background-color: transparent;
     border: 1px solid black;
 }
-.w-500{
-    width: 500px;
+.bk{
+    background-color: black;
+    border:1px solid white;
 }
-.h-500{
-    height: 500px;
+.btn-start{
+    border-radius: 5%;
+    box-shadow: teal;
+
 }

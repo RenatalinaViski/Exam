@@ -1,0 +1,336 @@
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS
+$ git clone https://github.com/mbkkong/heroku-app.git
+Cloning into 'heroku-app'...
+remote: Enumerating objects: 15, done.
+remote: Counting objects: 100% (15/15), done.
+remote: Compressing objects: 100% (10/10), done.
+remote: Total 15 (delta 2), reused 15 (delta 2), pack-reused 0
+Unpacking objects: 100% (15/15), done.
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS
+$ cd heroku
+heroku/     heroku-app/
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS
+$ cd heroku-app/
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app (master)
+$ json-server -w db.json
+
+  \{^_^}/ hi!
+
+  Loading db.json
+  Done
+
+  Resources
+  http://localhost:3000/users
+
+  Home
+  http://localhost:3000
+
+  Type s + enter at any time to create a snapshot of the database
+  Watching...
+
+npm install
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app (master)
+$ rm -rf .git
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app
+$ git add .
+fatal: not a git repository (or any of the parent directories): .git
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app
+$ git init
+Initialized empty Git repository in C:/Users/Натали/Desktop/A-level/JS/heroku-app/.git/
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app (master)
+$ rm yarn.lock
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app (master)
+$ git add .
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app (master)
+$ git commit -m'First heroku'
+[master (root-commit) bc0a39a] First heroku
+ 6 files changed, 1799 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 app.js
+ create mode 100644 db.json
+ create mode 100644 package-lock.json
+ create mode 100644 package.json
+ create mode 100644 public/index.html
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app (master)
+$ git remote add origin https://github.com/Renatalina/firstHeroku.git
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app (master)
+$ git push-U origin master
+git: 'push-U' is not a git command. See 'git --help'.
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app (master)
+$ git push -u origin master
+remote: Permission to Renatalina/firstHeroku.git denied to RenatalinaViski.
+fatal: unable to access 'https://github.com/Renatalina/firstHeroku.git/': The requested URL returned error: 403
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app (master)
+$ git remote add origin https://github.com/RenatalinaViski/newFirst.git
+fatal: remote origin already exists.
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS/heroku-app (master)
+$ cd ../
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/JS
+$ cd ../
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level
+$ git clone https://github.com/mbkkong/heroku-app.git
+Cloning into 'heroku-app'...
+remote: Enumerating objects: 15, done.
+remote: Counting objects: 100% (15/15), done.
+remote: Compressing objects: 100% (10/10), done.
+remote: Total 15 (delta 2), reused 15 (delta 2), pack-reused 0
+Unpacking objects: 100% (15/15), done.
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level
+$ rm -rf .git
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level
+$ rm yarn.lock
+rm: cannot remove 'yarn.lock': No such file or directory
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level
+$ git init
+Initialized empty Git repository in C:/Users/Натали/Desktop/A-level/.git/
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level (master)
+$ rm yarn.lock
+rm: cannot remove 'yarn.lock': No such file or directory
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level (master)
+$ rm yarn.lock
+rm: cannot remove 'yarn.lock': No such file or directory
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level (master)
+$ rm yarn.lock
+rm: cannot remove 'yarn.lock': No such file or directory
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level (master)
+$ cd heroku-app/
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/heroku-app (master)
+$ rm -rf .git
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/heroku-app (master)
+$ git init
+Initialized empty Git repository in C:/Users/Натали/Desktop/A-level/heroku-app/.git/
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/heroku-app (master)
+$ rm yarn.lock
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/heroku-app (master)
+$ git add .
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/heroku-app (master)
+$ git commit -m'1'
+[master (root-commit) 8f8c5aa] 1
+ 5 files changed, 48 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 app.js
+ create mode 100644 db.json
+ create mode 100644 package.json
+ create mode 100644 public/index.html
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/heroku-app (master)
+$ git remote add origin https://github.com/RenatalinaViski/newFirst.git
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/heroku-app (master)
+$ git push -u origin master
+Enumerating objects: 8, done.
+Counting objects: 100% (8/8), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (8/8), 1.00 KiB | 343.00 KiB/s, done.
+Total 8 (delta 0), reused 0 (delta 0)
+To https://github.com/RenatalinaViski/newFirst.git
+ * [new branch]      master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/heroku-app (master)
+$ heroku login
+heroku: Press any key to open up the browser to login or q to exit:
+
+Opening browser to https://cli-auth.heroku.com/auth/browser/6e2963bf-d218-4e34-bf44-08d62834e33d
+heroku: Waiting for login...
+
+
+
+
+
+
+
+Renatalina
+^C^C▒▒▒▒▒▒▒▒ ▒믮▒▒▒▒▒▒ ▒▒▒▒⭮▒▒ 䠩▒▒ [Y(▒▒)/N(▒▒▒)]? y
+y
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/heroku-app (master)
+$ cd ../
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level (master)
+$ git clone https://github.com/Renatalina/two.git
+Cloning into 'two'...
+remote: Enumerating objects: 8, done.
+remote: Counting objects: 100% (8/8), done.
+remote: Compressing objects: 100% (6/6), done.
+remote: Total 8 (delta 0), reused 8 (delta 0), pack-reused 0
+Unpacking objects: 100% (8/8), done.
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level (master)
+$ cd js
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js (master)
+$ git clone https://github.com/RenatalinaViski/newFirst.git
+Cloning into 'newFirst'...
+remote: Enumerating objects: 8, done.
+remote: Counting objects: 100% (8/8), done.
+remote: Compressing objects: 100% (6/6), done.
+remote: Total 8 (delta 0), reused 8 (delta 0), pack-reused 0
+Unpacking objects: 100% (8/8), done.
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js (master)
+$ cd Exam/
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git init
+Initialized empty Git repository in C:/Users/Натали/Desktop/A-level/JS/Exam/.git/
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git add .
+warning: LF will be replaced by CRLF in db.json.
+The file will have its original line endings in your working directory
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git commit -m"test"
+[master (root-commit) 56c8724] test
+ 4 files changed, 60 insertions(+)
+ create mode 100644 db.json
+ create mode 100644 public/app.js
+ create mode 100644 public/index.html
+ create mode 100644 public/style.css
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git remote add origin https://github.com/RenatalinaViski/Exam.git
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git push -u origin master
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (7/7), 1.08 KiB | 552.00 KiB/s, done.
+Total 7 (delta 0), reused 0 (delta 0)
+To https://github.com/RenatalinaViski/Exam.git
+ * [new branch]      master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git add .
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git commit -m'test'
+[master 0d51259] test
+ 1 file changed, 7 insertions(+)
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git push
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 500 bytes | 25.00 KiB/s, done.
+Total 4 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/RenatalinaViski/Exam.git
+   56c8724..0d51259  master -> master
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git add .
+warning: LF will be replaced by CRLF in db.json.
+The file will have its original line endings in your working directory
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git commit -m'test'
+[master 5b1157e] test
+ 2 files changed, 7 insertions(+)
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git push
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 534 bytes | 534.00 KiB/s, done.
+Total 5 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/RenatalinaViski/Exam.git
+   0d51259..5b1157e  master -> master
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ npm install
+npm WARN saveError ENOENT: no such file or directory, open 'C:\Users\Натали\Desktop\A-level\js\Exam\package.json'
+npm WARN enoent ENOENT: no such file or directory, open 'C:\Users\Натали\Desktop\A-level\js\Exam\package.json'
+npm WARN Exam No description
+npm WARN Exam No repository field.
+npm WARN Exam No README data
+npm WARN Exam No license field.
+
+up to date in 0.737s
+found 0 vulnerabilities
+
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git add .
+warning: LF will be replaced by CRLF in db.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in package-lock.json.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in package.json.
+The file will have its original line endings in your working directory
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git commit -m'test'
+[master fadf5c3] test
+ 3 files changed, 26 insertions(+)
+ create mode 100644 package-lock.json
+ create mode 100644 package.json
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ git push
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (5/5), 685 bytes | 342.00 KiB/s, done.
+Total 5 (delta 1), reused 0 (delta 0)
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/RenatalinaViski/Exam.git
+   5b1157e..fadf5c3  master -> master
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ heroku logs --tail
+ »   Error: Missing required flag:
+ »     -a, --app APP  app to run command against
+ »   See more help with --help
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ heroku logs
+ »   Error: Missing required flag:
+ »     -a, --app APP  app to run command against
+ »   See more help with --help
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$ ^C
+
+Натали@▒▒▒▒▒▒-▒▒ MINGW64 ~/Desktop/A-level/js/Exam (master)
+$
