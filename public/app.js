@@ -1,6 +1,8 @@
 let appendBody = (node) => document.body.appendChild(document.createElement(node))
 let appendToParent = (parent, node) => parent.appendChild(document.createElement(node))
 let getId = (id) => document.getElementById(id)
+let btn = []
+let shot = []
 let ship1 = 0
 let ship2 = 0
 let ship3 = 0
@@ -109,13 +111,31 @@ function controlShip() {
       count++
       continue
     } if (arrBoat.find(item => { return item == (+arrBoat[i] + 10) })) {
+
       if (count > 1) {
         shipArr(count)
-        count == 2 ? idShip2.push(arrBoat[i - 2]) : idShip3.push(arrBoat[i - 3])
+        // if (count == 2) {
+        //   idShip2.push(+arrBoat[i - 2])
+        //   idShip2.push(+arrBoat[i-1])
+        // }
+        // if (count == 3) {
+        //   idShip3.push(+arrBoat[i - 3])
+        //   idShip3.push(+arrBoat[i - 2])
+        //   idShip3.push(+arrBoat[i - 1])
+        // }
+        // if (count == 4) {
+        //   idShip3.push(+arrBoat[i - 4])
+        //   idShip3.push(+arrBoat[i - 3])
+        //   idShip3.push(+arrBoat[i - 2])
+        //   idShip3.push(+arrBoat[i - 1])
+        // }
+
         count = 1
       }
+      let id = []
       for (let h = i, k = 10; h < arrBoat.length; h++) {
         if (arrBoat[i] == (+arrBoat[h] - k)) {
+          id.push(arrBoat[h])
           arrBoat.splice(h, 1)
           k += 10
           h--
@@ -123,19 +143,25 @@ function controlShip() {
 
         }
       }
+      id.unshift(arrBoat[i])
+      count == 2 ? id.forEach(item => { idShip2.push(item) }) : count == 3 ? id.forEach(item => { idShip3.push(item) }) : id.forEach(item => { idShip4.push(item) })//это что бы приципить кораблик на плаву
+      idTransform.push(arrBoat[i])
       arrBoat.splice(i, 1)
       i--
-      idTransform.push(arrBoat[i])
-      count == 2 ? idShip2.push(arrBoat[i]) : count == 3 ? idShip3.push(arrBoat[i]) : idShip4.push(arrBoat[i]) //это что бы приципить кораблик на плаву
       shipArr(count)
       count = 1
       continue
     } else {
       shipArr(count)
-      idShip1.push(arrBoat[i])
+      idShip1.push(+arrBoat[i])
       count = 1
     }
   }
+
+  console.log('idShip1' + idShip1)
+  console.log('idShip2' + idShip2)
+  console.log('idShip3' + idShip3)
+  console.log('idShip4' + idShip4)
 }
 
 function countShip() {
@@ -143,13 +169,14 @@ function countShip() {
   if (ship1 > 4 || ship1 < 4 || ship2 > 3 || ship2 < 3 || ship3 > 2 || ship3 < 2 || ship4 > 1 || ship4 < 1) {
     alert("Прошу придерживаться правил и выбрать допустимое количество кораблей")
     console.log(`ship1=${ship1}, ship2=${ship2},ship3=${ship3}, ship4=${ship4}`)
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    return false
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //return false
+    return true
   }
   return true
 }
 
-let btn = []
+
 class Button {
   constructor(parent, idBtn, x, y, bool = 1) {
     let button = appendToParent(parent, 'button')
@@ -158,7 +185,7 @@ class Button {
     button.style.height = "2rem"
     button.style.width = "2rem"
     button.id = idBtn
-    //button.innerText = idBtn
+    button.innerText = idBtn
     button.className = "tr"
     button.x = x
     button.y = y
@@ -167,8 +194,13 @@ class Button {
     this.y = button.y
     this.agree = bool//это признак моего поля, если false то это противник   
     button.onclick = () => {
-      if (button.classList.contains("black")) {
+      if (button.classList.contains("bk")) {
         button.style.backgroundColor = "red"
+      }
+      if (button.className == "tr" && !this.agree) {
+        button.style.backgroundColor = "#009999"
+        button.style.border = "1px solid white"
+        button.className = "loose"
       }
       if (button.style.backgroundColor == "transparent") {
         if ((this.id > 9 && this.id < 90) && (this.x > 1 && this.x < 10)) {
@@ -176,20 +208,16 @@ class Button {
             button.style.backgroundColor = "black"
             button.style.border = "1px solid white"
             button.className = "bk"
-            btn.push(parseInt(button.id))//проблема все запушить повторно в массив
+            btn.push(parseInt(button.id))
           }
-        } else if (controlX(button)&&this.agree) {
+        } else if (controlX(button) && this.agree) {
           button.style.backgroundColor = "black"
           button.style.border = "1px solid white"
           button.className = "bk"
           btn.push(parseInt(button.id))
         }
-        if (button.className == "tr") {
-          button.style.backgroundColor = "#009999"
-          button.style.border = "1px solid white"
-          button.className = "loose"          
-        }
       }
+
     }
     button.ondblclick = () => {
       if (this.agree) {
@@ -199,12 +227,12 @@ class Button {
         btn.splice(btn.indexOf(+button.id), 1)
       }
     }
-    button.oncontextmenu=(event)=>{
-      if(!this.agree){
+    button.oncontextmenu = (event) => {
+      if (!this.agree) {
         button.style.backgroundColor = "#1a53ff"
         button.style.border = "1px solid black"
       }
-      
+
     }
   }
 }
@@ -225,10 +253,7 @@ class Field {
       }
     }
   }
-  shoot(fielMaria) {
-    ///здесь как будут попадать в Марию
 
-  }
 }
 
 
@@ -316,22 +341,52 @@ class Game {
         field2.style.alignItems = "center"
         let fieldApponent = new Field(field2, 'TomHenks', false, 100)
         for (let i = 0; i < btn.length; i++) {
-          getId(btn[i] + 100).className = 'black'         
+          getId(btn[i] + 100).className = 'bk' //здесь заполняю поле противника
         }
-
-        //console.log(btn)
       }
     }
   }
 }
 
 
-start()
-setTimeout(() => {
-  document.body.innerText = ' '
-  document.body.style.backgroundColor = "transparent"
-  let game = new Game(document.body)
 
+function shoot(num) {
+  ///здесь как будут попадать в Марию
+  let explosion = Math.floor(Math.random() * 100)
+  console.log(explosion)
+  console.log(btn)
+
+  if (!shot.indexOf(explosion)) {
+    shot.push(explosion)
+    //console.log(shot)
+    if (btn.indexOf(explosion)) {
+      getId(explosion).style.backgroundColor = "red"
+
+      setTimeout(() => {//мы попали по мешени
+        shoot(explosion + 1)
+      }, 1000)
+
+    }
+    return explosion
+  }
+  else {
+    shoot()
+  }
+  console.log("DFaASDF")
+}
+
+////////раскоментить довести до ума, пусть тоже ждут друг друга
+// start()
+
+// setTimeout(() => {
+//   document.body.innerText = ' '
+//   document.body.style.backgroundColor = "transparent"
+// }, 3000)
+
+let game = new Game(document.body)
+/////уходит в рекурсию потому, что надо синхронизировать
+setTimeout(() => {
+  shoot()
 }, 3000)
 
 
