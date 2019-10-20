@@ -67,17 +67,23 @@ function controlX(button) {
 
 function sortBtn(arr) {
   let num = 0
+  let newArr = []
   for (let i = 0; i < arr.length - 1; i++) {
     for (let g = i; g < arr.length - 1; g++) {
+
       if (arr[i] > arr[g + 1]) {
         num = arr[g + 1]
         arr[g + 1] = arr[i]
         arr[i] = num
         num = 0
       }
+
     }
+    newArr.push(arr[i])
   }
-  return arr
+  newArr.push(arr[arr.length - 1])
+  //console.log(newArr)
+  return newArr
 }
 function shipArr(count) {
   switch (count) {
@@ -96,10 +102,6 @@ function shipArr(count) {
   }
 }
 function controlShip() {
-  ship1 = 0
-  ship2 = 0
-  ship3 = 0
-  ship4 = 0
   let arrBoat = sortBtn(btn)
   let count = 1
   for (let i = 0; i < arrBoat.length; i++) {
@@ -134,19 +136,14 @@ function controlShip() {
       count = 1
     }
   }
-
 }
 
 function countShip() {
-  ship1 = 0
-  ship2 = 0
-  ship3 = 0
-  ship4 = 0
   controlShip()
   if (ship1 > 4 || ship1 < 4 || ship2 > 3 || ship2 < 3 || ship3 > 2 || ship3 < 2 || ship4 > 1 || ship4 < 1) {
     alert("Прошу придерживаться правил и выбрать допустимое количество кораблей")
     console.log(`ship1=${ship1}, ship2=${ship2},ship3=${ship3}, ship4=${ship4}`)
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     return false
   }
   return true
@@ -154,14 +151,14 @@ function countShip() {
 
 let btn = []
 class Button {
-  constructor(parent, idBtn, x, y, bool=1) {
+  constructor(parent, idBtn, x, y, bool = 1) {
     let button = appendToParent(parent, 'button')
     button.style.border = "1px solid black"
     button.style.backgroundColor = "transparent"
     button.style.height = "2rem"
     button.style.width = "2rem"
     button.id = idBtn
-    button.innerText = idBtn
+    //button.innerText = idBtn
     button.className = "tr"
     button.x = x
     button.y = y
@@ -170,33 +167,29 @@ class Button {
     this.y = button.y
     this.agree = bool//это признак моего поля, если false то это противник   
     button.onclick = () => {
+      if (button.classList.contains("black")) {
+        button.style.backgroundColor = "red"
+      }
       if (button.style.backgroundColor == "transparent") {
         if ((this.id > 9 && this.id < 90) && (this.x > 1 && this.x < 10)) {
           if (control(button)) {
             button.style.backgroundColor = "black"
             button.style.border = "1px solid white"
             button.className = "bk"
-            btn.push(parseInt(button.id))
+            btn.push(parseInt(button.id))//проблема все запушить повторно в массив
           }
-        } else if (controlX(button)) {
+        } else if (controlX(button)&&this.agree) {
           button.style.backgroundColor = "black"
           button.style.border = "1px solid white"
           button.className = "bk"
           btn.push(parseInt(button.id))
         }
-        console.log(this.agree)
-        if(!this.agree){
+        if (button.className == "tr") {
           button.style.backgroundColor = "#009999"
           button.style.border = "1px solid white"
-          button.className = "loose"
-
+          button.className = "loose"          
+        }
       }
-      }
-      if(button.style.backgroundColor == "black"&&!this.agree){
-        button.style.backgroundColor="transparent"
-          button.style.backgroundImage=data.fire
-      }
-      
     }
     button.ondblclick = () => {
       if (this.agree) {
@@ -206,11 +199,18 @@ class Button {
         btn.splice(btn.indexOf(+button.id), 1)
       }
     }
+    button.oncontextmenu=(event)=>{
+      if(!this.agree){
+        button.style.backgroundColor = "#1a53ff"
+        button.style.border = "1px solid black"
+      }
+      
+    }
   }
 }
 
 class Field {
-  constructor(parent, owner,bool=true) {
+  constructor(parent, owner, bool = true, startId = 0) {
     let field = appendToParent(parent, 'div')
     field.style.height = "21rem"
     field.style.width = "21rem"
@@ -219,11 +219,15 @@ class Field {
     this.owner = owner
     this.button = []
     this.ships = []
-    for (let y = 1, i = 0; y <= 10; y++) {
+    for (let y = 1, i = startId; y <= 10; y++) {
       for (let x = 1; x <= 10; x++ , i++) {
-        this.button.push(new Button(field, `${i}`, x, y,bool))
+        this.button.push(new Button(field, `${i}`, x, y, bool))
       }
     }
+  }
+  shoot(fielMaria) {
+    ///здесь как будут попадать в Марию
+
   }
 }
 
@@ -246,7 +250,7 @@ function start() {
   imgStart.style.width = "20rem"
   imgStart.style.height = "20rem"
   imgStart.style.marginTop = "-5rem"
-  imgStart.style.marginLeft = "7rem"
+  imgStart.style.marginLeft = "9rem"
   imgStart.style.color = "#454545"
 }
 
@@ -291,21 +295,31 @@ class Game {
 
 
     buttonStart.onclick = () => {
+      ship1 = 0
+      ship2 = 0
+      ship3 = 0
+      ship4 = 0
       if (countShip()) {
         document.getElementsByClassName('div-role')[0].remove()
         document.getElementsByClassName('btnStart')[0].remove()
+
+        fieldMaria.button.forEach(item => {//что бы не мог в период игры делать новые корабли
+          getId(item.id).onclick = null
+          getId(item.id).ondblclick = null
+
+        })
+
         let field2 = appendBody('div')
         field2.style.height = "500px"
         field2.style.width = "500px"
         field2.style.display = "flex"
         field2.style.alignItems = "center"
-        let fieldApponent = new Field(field2, 'TomHenks', false)
+        let fieldApponent = new Field(field2, 'TomHenks', false, 100)
+        for (let i = 0; i < btn.length; i++) {
+          getId(btn[i] + 100).className = 'black'         
+        }
 
-        fieldMaria.button.forEach(item => {//что бы не мог в период игры делать новые корабли
-          console.log(item.id)
-          getId(item.id).onclick=null
-          getId(item.id).ondblclick=null
-        })//могут быть проблемы
+        //console.log(btn)
       }
     }
   }
