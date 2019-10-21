@@ -2,7 +2,7 @@ let appendBody = (node) => document.body.appendChild(document.createElement(node
 let appendToParent = (parent, node) => parent.appendChild(document.createElement(node))
 let getId = (id) => document.getElementById(id)
 let btn = []
-let shot = []
+let baBah = []
 let ship1 = 0
 let ship2 = 0
 let ship3 = 0
@@ -12,6 +12,7 @@ let idShip2 = []
 let idShip3 = []
 let idShip4 = []
 let idTransform = []
+
 
 
 function control(button) {
@@ -84,9 +85,9 @@ function sortBtn(arr) {
     newArr.push(arr[i])
   }
   newArr.push(arr[arr.length - 1])
-  //console.log(newArr)
   return newArr
 }
+
 function shipArr(count) {
   switch (count) {
     case 1:
@@ -103,6 +104,7 @@ function shipArr(count) {
       break
   }
 }
+
 function controlShip() {
   let arrBoat = sortBtn(btn)
   let count = 1
@@ -112,24 +114,8 @@ function controlShip() {
       continue
     } if (arrBoat.find(item => { return item == (+arrBoat[i] + 10) })) {
 
-      if (count > 1) {
+      if (count > 1) {//////под вопросом может этот кусок и не нужен
         shipArr(count)
-        // if (count == 2) {
-        //   idShip2.push(+arrBoat[i - 2])
-        //   idShip2.push(+arrBoat[i-1])
-        // }
-        // if (count == 3) {
-        //   idShip3.push(+arrBoat[i - 3])
-        //   idShip3.push(+arrBoat[i - 2])
-        //   idShip3.push(+arrBoat[i - 1])
-        // }
-        // if (count == 4) {
-        //   idShip3.push(+arrBoat[i - 4])
-        //   idShip3.push(+arrBoat[i - 3])
-        //   idShip3.push(+arrBoat[i - 2])
-        //   idShip3.push(+arrBoat[i - 1])
-        // }
-
         count = 1
       }
       let id = []
@@ -140,7 +126,6 @@ function controlShip() {
           k += 10
           h--
           count++
-
         }
       }
       id.unshift(arrBoat[i])
@@ -153,15 +138,35 @@ function controlShip() {
       continue
     } else {
       shipArr(count)
-      idShip1.push(+arrBoat[i])
+      if (count == 1) {
+        idShip1.push(+arrBoat[i])
+      }
+      if (count == 2) {
+        idShip2.push(+arrBoat[i - 1])
+        idShip2.push(+arrBoat[i])
+      }
+      if (count == 3) {
+        idShip3.push(+arrBoat[i - 2])
+        idShip3.push(+arrBoat[i - 1])
+        idShip3.push(+arrBoat[i])
+      }
+      if (count == 4) {
+        idShip4.push(+arrBoat[i - 3])
+        idShip4.push(+arrBoat[i - 2])
+        idShip4.push(+arrBoat[i - 1])
+        idShip4.push(+arrBoat[i])
+      }
+
       count = 1
     }
   }
 
-  console.log('idShip1' + idShip1)
-  console.log('idShip2' + idShip2)
-  console.log('idShip3' + idShip3)
-  console.log('idShip4' + idShip4)
+  // console.log(`ship1=${ship1},  ship2=${ship2},  ship3=${ship3}, ship4=${ship4}`)
+
+  // console.log('idShip1' + idShip1)
+  // console.log('idShip2' + idShip2)
+  // console.log('idShip3' + idShip3)
+  // console.log('idShip4' + idShip4)
 }
 
 function countShip() {
@@ -196,11 +201,16 @@ class Button {
     button.onclick = () => {
       if (button.classList.contains("bk")) {
         button.style.backgroundColor = "red"
+        button.className = "red"
       }
       if (button.className == "tr" && !this.agree) {
         button.style.backgroundColor = "#009999"
         button.style.border = "1px solid white"
         button.className = "loose"
+        //setTimeout(() => {
+        shoot()
+        //}, 1500)
+
       }
       if (button.style.backgroundColor == "transparent") {
         if ((this.id > 9 && this.id < 90) && (this.x > 1 && this.x < 10)) {
@@ -244,6 +254,7 @@ class Field {
     field.style.width = "21rem"
     field.style.display = "inline-block"
     field.border = "1px solid black"
+    field.id = owner
     this.owner = owner
     this.button = []
     this.ships = []
@@ -270,13 +281,13 @@ function start() {
   img.style.justifyContent = "center"
   img.style.marginTop = "5rem"
 
-  let imgStart = appendToParent(divImg, 'img')
-  imgStart.src = 'https://media.giphy.com/media/4SY7hLDg6zA6bcGp4p/giphy.gif'
-  imgStart.style.width = "20rem"
-  imgStart.style.height = "20rem"
-  imgStart.style.marginTop = "-5rem"
-  imgStart.style.marginLeft = "9rem"
-  imgStart.style.color = "#454545"
+  // let imgStart = appendToParent(divImg, 'img')
+  // imgStart.src = 'https://media.giphy.com/media/4SY7hLDg6zA6bcGp4p/giphy.gif'
+  // imgStart.style.width = "20rem"
+  // imgStart.style.height = "20rem"
+  // imgStart.style.marginTop = "-5rem"
+  // imgStart.style.marginLeft = "9rem"
+  // imgStart.style.color = "#454545"
 }
 
 function role(parent) {
@@ -343,53 +354,101 @@ class Game {
         for (let i = 0; i < btn.length; i++) {
           getId(btn[i] + 100).className = 'bk' //здесь заполняю поле противника
         }
+
+        setTimeout(() => {///прыгающая картинка
+          let imgStart = appendToParent(document.body, 'img')
+          imgStart.src = 'https://media.giphy.com/media/4SY7hLDg6zA6bcGp4p/giphy.gif'
+          imgStart.style.width = "20rem"
+          imgStart.style.height = "20rem"
+          imgStart.style.marginTop = "-5rem"
+          imgStart.style.marginLeft = "9rem"
+          imgStart.style.color = "#454545"
+          imgStart.id = "imgStart"
+        }, 500)
+
+        setTimeout(() => {
+          getId('imgStart').remove()
+
+          ///может здесь начать стрелять?
+        }, 4000)
+
       }
     }
+
   }
 }
+function showEnemy(pathImg) {
+  let imgStart = appendToParent(document.body, 'img')  ///проблема теперь здесь 
+  //imgStart.src = "https://i.gifer.com/1mnr.gif"
+  imgStart.src = pathImg
+  imgStart.style.width = "20rem"
+  imgStart.style.height = "20rem"
+  imgStart.style.marginTop = "-5rem"
+  imgStart.style.marginLeft = "9rem"
+  imgStart.style.color = "#454545"
+  imgStart.id = "imgEnemy"
+}
+function shoot(num = 0) {
+  let explosion = num
+  console.log(num)
+  if (num == 0) {
+    explosion = Math.round(Math.random() * 100)
+  } else if (num > 99) {
+    explosion = 0
+  }
+  if (baBah.indexOf(explosion) < 0) {
+    baBah.push(explosion)
+    setTimeout(() => {
+      if (btn.indexOf(explosion) > -1) {
+        showEnemy("https://i.gifer.com/1mnr.gif")
+        getId(explosion).style.backgroundColor = "red"
+        getId(explosion).className = "red"
+        ///подсчет убитого корабля
+        if (idShip1.indexOf(explosion)) {
+          idShip1.splice(idShip1.indexOf(explosion), 1)
+        }
+        if (idShip2.indexOf(explosion)) {
+          idShip2.splice(idShip2.indexOf(explosion), 1)
+        }
+        if (idShip3.indexOf(explosion)) {
+          idShip3.splice(idShip3.indexOf(explosion), 1)
+        }
+        if (idShip4.indexOf(explosion)) {
+          ///если idShip4%4==0 /// картика бегающего радующегося
+          //let put=getId('Maria')        
+          idShip4.splice(idShip4.indexOf(explosion), 1)
+        }
 
+        if (getId('imgEnemy') != null) {
+          getId('imgEnemy').remove()
+        }
+        shoot(explosion + 1)//////////////
 
-
-function shoot(num) {
-  ///здесь как будут попадать в Марию
-  let explosion = Math.floor(Math.random() * 100)
-  console.log(explosion)
-  console.log(btn)
-
-  if (!shot.indexOf(explosion)) {
-    shot.push(explosion)
-    //console.log(shot)
-    if (btn.indexOf(explosion)) {
-      getId(explosion).style.backgroundColor = "red"
-
-      setTimeout(() => {//мы попали по мешени
-        shoot(explosion + 1)
-      }, 1000)
-
-    }
-    return explosion
+      } else {
+        console.log(getId(explosion))
+        getId(explosion).style.backgroundColor = "#00cc00"
+      }
+    }, 1000)
   }
   else {
     shoot()
   }
-  console.log("DFaASDF")
+
 }
 
+
+
+
+
+
 ////////раскоментить довести до ума, пусть тоже ждут друг друга
-// start()
-
-// setTimeout(() => {
-//   document.body.innerText = ' '
-//   document.body.style.backgroundColor = "transparent"
-// }, 3000)
-
-let game = new Game(document.body)
-/////уходит в рекурсию потому, что надо синхронизировать
+start()
+let game = null
 setTimeout(() => {
-  shoot()
+  document.body.innerText = ' '
+  document.body.style.backgroundColor = "transparent"
+  game = new Game(document.body)
 }, 3000)
-
-
 
 
 
