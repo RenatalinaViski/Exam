@@ -183,7 +183,7 @@ class Button {
     button.style.height = "2rem"
     button.style.width = "2rem"
     button.id = idBtn
-    button.innerText = idBtn
+    //button.innerText = idBtn
     button.className = "tr"
     button.x = x
     button.y = y
@@ -262,7 +262,23 @@ let userChoose = () => {
 
 }
 
-function start() {
+function music(){
+  let music=appendBody('audio')
+  music.controls=true
+  music.autoplay=true
+  let source=appendToParent(music,'source')
+  source.src="./music/dolphin.wav"
+  source.type="audio/wav"
+  music.style.display="none"
+}
+
+
+function start() {    
+  music()
+  document.body.style.background= 'url("./img/35.jpg")'
+  document.body.style.backgroundRepeat="no-repeat"
+  document.body.style.backgroundAttachment="fixed"
+  document.body.style.backgroundSize="100% 100%"
   let divImg = appendBody('div')
   let img = appendToParent(divImg, 'img')
   img.src = './img/morskoiboi.jpg'
@@ -271,61 +287,90 @@ function start() {
   img.style.justifyContent = "center"
   img.style.marginTop = "5rem"
 
-  // let imgStart = appendToParent(divImg, 'img')
-  // imgStart.src = 'https://media.giphy.com/media/4SY7hLDg6zA6bcGp4p/giphy.gif'
-  // imgStart.style.width = "20rem"
-  // imgStart.style.height = "20rem"
-  // imgStart.style.marginTop = "-5rem"
-  // imgStart.style.marginLeft = "9rem"
-  // imgStart.style.color = "#454545"
+  let gifStart = appendToParent(divImg, 'img')
+  gifStart.src = 'https://media.giphy.com/media/N6VCRG1dzk7Ic/giphy.gif'
+  gifStart.style.width = "40rem"
+  gifStart.style.height = "10rem"
+  gifStart.style.marginTop = "0"
+  gifStart.style.marginLeft = "1rem"
+  gifStart.style.color = "#454545"
 }
 
 function role(parent) {
-  let divRole = appendToParent(parent, 'div')
-  divRole.classList.add('div-role', 'mr-3')
-  let p = appendToParent(divRole, 'p')
-  p.innerText = `Необходиму заполнить поле:
-  4-х палубный корабль - 1шт
-  3-х палубный корабль - 2шт
-  2-х палубный корабль - 3шт
-  1-но палубный корабль-4шт
-  Расстояние между кораблями 
-  должно быть не менее 1-й клетки.
-  Корабли могут выстраиваться 
+  let divRole = appendToParent(parent, 'div')  
+  divRole.classList.add('div-role', 'mr-3','mt-3')
+  let h3=appendToParent(divRole,'h3')
+  h3.innerText="Прошу ознакомиться с правилами игры:"
+  let ul = appendToParent(divRole, 'ul')
+  let h4=appendToParent(ul,'h4')  
+  h4.innerText = `Необходиму заполнить поле:`
+  let li1=appendToParent(ul,'li')
+  li1.innerText="4-х палубный корабль - 1шт"
+  let li2=appendToParent(ul,'li')
+  li2.innerText="3-х палубный корабль - 2шт"
+  let li3=appendToParent(ul,'li')
+  li3.innerText="2-х палубный корабль - 3шт"
+  let li4=appendToParent(ul,'li')
+  li4.innerText="1-но палубный корабль-4шт"
+  let li5=appendToParent(ul,'li')
+  li5.innerText=`Расстояние между кораблями 
+  должно быть не менее 1-й клетки.`
+  let li6=appendToParent(ul,'li')
+  li6.innerText=`Корабли могут выстраиваться 
   только по горизонтали или вертикали`
-  p.style.fontSize = "1.2rem"
-  p.style.fontWeight = "bold"
+  ul.style.fontSize = "1.2rem"
 }
 
+function imgBetweenGame(pathImg){
+   let imgStart = appendToParent(getId('divGif'),'img')  
+  imgStart.src = pathImg
+  imgStart.style.width = "20rem"
+  imgStart.style.height = "20rem"
+  imgStart.style.marginTop = "5rem"
+  imgStart.style.marginLeft = "-6rem"
+  imgStart.id = "imgStart"
+}
 
 class Game {
   constructor(parent) {
     document.body.style.background = "url('./img/1.jpg')"
-    role(document.body)
-    let field = appendBody('div')
+    document.body.style.display="flex"
+    document.body.style.flexFlow="column"
+
+    let divContainer=appendBody('div')
+    divContainer.style.display="flex"
+    divContainer.style.flexFlow="row"
+
+    role(divContainer)
+    let divMaria=appendToParent(divContainer,'div')       
+    let field = appendToParent(divMaria,'div')
     field.style.height = "500px"
     field.style.width = "500px"
     field.style.display = "flex"
     field.style.alignItems = "center"
+    let divGif=appendToParent(divContainer,'div')
+    divGif.id="divGif" 
     let fieldMaria = new Field(field, 'Maria') //начинаем игру, создаем поле Мария
 
 
     let buttonStart = appendToParent(parent, 'button')
     buttonStart.classList.add('btn-start')
-    buttonStart.style.height = "5rem"
+    buttonStart.style.height = "10rem"
     buttonStart.style.width = "10rem"
-    buttonStart.style.backgroundColor = "#0066cc"
-    buttonStart.innerText = "START"
+    buttonStart.style.background='transparent url("https://media.giphy.com/media/6GGUSevj6sS5i/giphy.gif") no-repeat center'
+    buttonStart.style.backgroundSize="100% 100%"
+
     buttonStart.classList.add("btnStart")
     buttonStart.style.fontSize = "1.5rem"
 
 
-    buttonStart.onclick = () => {
+    buttonStart.onclick = () => {      
       ship1 = 0
       ship2 = 0
       ship3 = 0
       ship4 = 0
       if (countShip()) {//если наши кораблики в правильном количество, то можем начинать играть
+        document.body.style.flexFlow="row"
         document.getElementsByClassName('div-role')[0].remove()
         document.getElementsByClassName('btnStart')[0].remove()
 
@@ -335,29 +380,26 @@ class Game {
 
         })
 
-        let field2 = appendBody('div')
+        let field2 = appendToParent(divContainer,'div')
+        field2.id='Tom'
         field2.style.height = "500px"
         field2.style.width = "500px"
         field2.style.display = "flex"
         field2.style.alignItems = "center"
         let fieldApponent = new Field(field2, 'TomHenks', false, 100)//создали поле противника
+        
+        imgBetweenGame("https://media.giphy.com/media/4SY7hLDg6zA6bcGp4p/giphy.gif")
+
         for (let i = 0; i < btn.length; i++) {
           getId(btn[i] + 100).className = 'bk' //здесь заполняю поле противника
         }
 
         setTimeout(() => {///прыгающая картинка Start
-          let imgStart = appendToParent(document.body, 'img')
-          imgStart.src = 'https://media.giphy.com/media/4SY7hLDg6zA6bcGp4p/giphy.gif'
-          imgStart.style.width = "20rem"
-          imgStart.style.height = "20rem"
-          imgStart.style.marginTop = "-5rem"
-          imgStart.style.marginLeft = "9rem"
-          imgStart.style.color = "#454545"
-          imgStart.id = "imgStart"
+
         }, 500)
 
         setTimeout(() => {
-          getId('imgStart').remove()
+          getId('imgStart').remove()//удаляем прыгающую картинку
 
           ///может здесь начать стрелять?
         }, 4000)
@@ -367,19 +409,19 @@ class Game {
 
   }
 }
-function showEnemy(pathImg) {
-  let imgStart = appendToParent(document.body, 'img')  ///проблема теперь здесь 
-  //imgStart.src = "https://i.gifer.com/1mnr.gif"
-  imgStart.src = pathImg
-  imgStart.style.width = "20rem"
-  imgStart.style.height = "20rem"
-  imgStart.style.marginTop = "-5rem"
-  imgStart.style.marginLeft = "9rem"
-  imgStart.style.color = "#454545"
-  imgStart.id = "imgEnemy"
-}
+// function showEnemy(pathImg) {
+//   let imgStart = appendToParent(document.body, 'img')  ///проблема теперь здесь 
+//   //imgStart.src = "https://i.gifer.com/1mnr.gif"
+//   imgStart.src = pathImg
+//   imgStart.style.width = "20rem"
+//   imgStart.style.height = "20rem"
+//   imgStart.style.marginTop = "-5rem"
+//   imgStart.style.marginLeft = "9rem"
+//   imgStart.style.color = "#454545"
+//   imgStart.id = "imgEnemy"
+// }
 
-function shootMaria(num = 0) {
+function shoot(num = 0) {
   let explosion = num
   if (num == 0) {
     explosion = Math.round(Math.random() * 100)
@@ -390,7 +432,7 @@ function shootMaria(num = 0) {
     baBah.push(explosion)
     setTimeout(() => {
       if (btn.indexOf(explosion) > -1) {
-        showEnemy("https://i.gifer.com/1mnr.gif")
+        imgBetweenGame("https://i.gifer.com/1mnr.gif")
 
         getId(explosion).style.backgroundColor = "red"
         getId(explosion).className = "red"
@@ -410,8 +452,8 @@ function shootMaria(num = 0) {
           idShip4.splice(idShip4.indexOf(explosion), 1)
         }
 
-        if (getId('imgEnemy') != null) {
-          getId('imgEnemy').remove()
+        if (getId('imgStart') != null) {
+          getId('imgStart').remove()
         }
         shoot(explosion + 1)//////////////мы попали, идем попадать еще раз
 
@@ -429,14 +471,14 @@ function shootMaria(num = 0) {
 
 
 
-////////раскоментить довести до ума, пусть тоже ждут друг друга
+
 start()
 let game = null
 setTimeout(() => {
   document.body.innerText = ' '
   document.body.style.backgroundColor = "transparent"
   game = new Game(document.body)
-}, 3000)
+}, 10500)
 
 
 
