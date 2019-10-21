@@ -88,7 +88,7 @@ function sortBtn(arr) {
   return newArr
 }
 
-function shipArr(count) {
+function shipArr(count) {//пушим сюда наш подсчитанный кораблик
   switch (count) {
     case 1:
       ship1++
@@ -160,13 +160,6 @@ function controlShip() {
       count = 1
     }
   }
-
-  // console.log(`ship1=${ship1},  ship2=${ship2},  ship3=${ship3}, ship4=${ship4}`)
-
-  // console.log('idShip1' + idShip1)
-  // console.log('idShip2' + idShip2)
-  // console.log('idShip3' + idShip3)
-  // console.log('idShip4' + idShip4)
 }
 
 function countShip() {
@@ -199,28 +192,25 @@ class Button {
     this.y = button.y
     this.agree = bool//это признак моего поля, если false то это противник   
     button.onclick = () => {
-      if (button.classList.contains("bk")) {
+      if (button.classList.contains("bk")) { //если попали в противника
         button.style.backgroundColor = "red"
         button.className = "red"
       }
-      if (button.className == "tr" && !this.agree) {
+      if (button.className == "tr" && !this.agree) {//если промазали, передаем эстафету ему
         button.style.backgroundColor = "#009999"
         button.style.border = "1px solid white"
         button.className = "loose"
-        //setTimeout(() => {
         shoot()
-        //}, 1500)
-
       }
       if (button.style.backgroundColor == "transparent") {
         if ((this.id > 9 && this.id < 90) && (this.x > 1 && this.x < 10)) {
-          if (control(button)) {
+          if (control(button)) {//проверка центра поля, можно ли поставить кораблик сюда
             button.style.backgroundColor = "black"
             button.style.border = "1px solid white"
             button.className = "bk"
             btn.push(parseInt(button.id))
           }
-        } else if (controlX(button) && this.agree) {
+        } else if (controlX(button) && this.agree) {//проверка стен поля, можно ли поставить сюда кораблики
           button.style.backgroundColor = "black"
           button.style.border = "1px solid white"
           button.className = "bk"
@@ -229,7 +219,7 @@ class Button {
       }
 
     }
-    button.ondblclick = () => {
+    button.ondblclick = () => {//если передумали и сняли эту палубу с кораблика
       if (this.agree) {
         button.style.backgroundColor = "transparent"
         button.style.border = "1px solid black"
@@ -237,7 +227,7 @@ class Button {
         btn.splice(btn.indexOf(+button.id), 1)
       }
     }
-    button.oncontextmenu = (event) => {
+    button.oncontextmenu = (event) => {//метка на поле
       if (!this.agree) {
         button.style.backgroundColor = "#1a53ff"
         button.style.border = "1px solid black"
@@ -317,7 +307,7 @@ class Game {
     field.style.width = "500px"
     field.style.display = "flex"
     field.style.alignItems = "center"
-    let fieldMaria = new Field(field, 'Maria')
+    let fieldMaria = new Field(field, 'Maria') //начинаем игру, создаем поле Мария
 
 
     let buttonStart = appendToParent(parent, 'button')
@@ -335,7 +325,7 @@ class Game {
       ship2 = 0
       ship3 = 0
       ship4 = 0
-      if (countShip()) {
+      if (countShip()) {//если наши кораблики в правильном количество, то можем начинать играть
         document.getElementsByClassName('div-role')[0].remove()
         document.getElementsByClassName('btnStart')[0].remove()
 
@@ -350,12 +340,12 @@ class Game {
         field2.style.width = "500px"
         field2.style.display = "flex"
         field2.style.alignItems = "center"
-        let fieldApponent = new Field(field2, 'TomHenks', false, 100)
+        let fieldApponent = new Field(field2, 'TomHenks', false, 100)//создали поле противника
         for (let i = 0; i < btn.length; i++) {
           getId(btn[i] + 100).className = 'bk' //здесь заполняю поле противника
         }
 
-        setTimeout(() => {///прыгающая картинка
+        setTimeout(() => {///прыгающая картинка Start
           let imgStart = appendToParent(document.body, 'img')
           imgStart.src = 'https://media.giphy.com/media/4SY7hLDg6zA6bcGp4p/giphy.gif'
           imgStart.style.width = "20rem"
@@ -388,9 +378,9 @@ function showEnemy(pathImg) {
   imgStart.style.color = "#454545"
   imgStart.id = "imgEnemy"
 }
-function shoot(num = 0) {
+
+function shootMaria(num = 0) {
   let explosion = num
-  console.log(num)
   if (num == 0) {
     explosion = Math.round(Math.random() * 100)
   } else if (num > 99) {
@@ -401,10 +391,11 @@ function shoot(num = 0) {
     setTimeout(() => {
       if (btn.indexOf(explosion) > -1) {
         showEnemy("https://i.gifer.com/1mnr.gif")
+
         getId(explosion).style.backgroundColor = "red"
         getId(explosion).className = "red"
         ///подсчет убитого корабля
-        if (idShip1.indexOf(explosion)) {
+        if (idShip1.indexOf(explosion)) {          
           idShip1.splice(idShip1.indexOf(explosion), 1)
         }
         if (idShip2.indexOf(explosion)) {
@@ -422,21 +413,18 @@ function shoot(num = 0) {
         if (getId('imgEnemy') != null) {
           getId('imgEnemy').remove()
         }
-        shoot(explosion + 1)//////////////
+        shoot(explosion + 1)//////////////мы попали, идем попадать еще раз
 
-      } else {
-        console.log(getId(explosion))
-        getId(explosion).style.backgroundColor = "#00cc00"
+      } else {        
+        getId(explosion).style.backgroundColor = "#00cc00"//промазали
       }
     }, 1000)
   }
   else {
-    shoot()
+    shoot()//рандом выдал такое же число, куда мы уже стреляли. поэтому опять запускаем его
   }
 
 }
-
-
 
 
 
