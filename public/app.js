@@ -15,8 +15,10 @@ let dieShip = []
 let btnEnemy = []
 let looseShip = []
 let idTransform = []
-
-
+let arrImgHero = []
+let arrUsers = []
+let game = null
+let time = null
 
 function control(button) {
   if (getId(+button.id + 11).classList.contains('tr') && getId(+button.id + 9).classList.contains('tr')) {
@@ -186,7 +188,6 @@ class Button {
     button.style.height = "2rem"
     button.style.width = "2rem"
     button.id = idBtn
-    //button.innerText = idBtn
     button.className = "tr"
     button.x = x
     button.y = y
@@ -199,12 +200,6 @@ class Button {
         button.style.backgroundColor = "red"
         button.className = "red"
         btnEnemy.splice(btnEnemy.indexOf(this.id), 1)
-        
-        fetch(`http://localhost:3000/users/Pirate_John.img/${Math.round(Math.random() * 10 % 8)}`)
-          .then(response => { return response.json() })
-          .then(data => {
-            imgBetweenGame(data)             
-            })    
 
         //imgBetweenGame("https://media.giphy.com/media/xUPGcAiOjE7aDuvGdG/giphy.gif")
       }
@@ -270,9 +265,110 @@ class Field {
 }
 
 
-let userChoose = () => {
+class UserChoose {//класс для выбора игрока
+  constructor(parent, imgSrc, nameCapitan, discriptionCaptan) {
+
+    let divCard = appendToParent(parent, 'div')
+    this.hidden = () => divCard.style.display = "none"
+    this.show = () => divCard.style.display = "show"
+    let img = appendToParent(divCard, 'img')
+    img.src = imgSrc
+    img.style.width = "20rem"
+    img.style.height = "20rem"
+    let divDiscription = appendToParent(divCard, 'div')
+    let input = appendToParent(divDiscription, 'input')
+
+    let h3Name = appendToParent(divDiscription, 'h3')
+    h3Name.innerText = nameCapitan
+    let pDiscription = appendToParent(divDiscription, 'p')
+    pDiscription.innerText = discriptionCaptan
+
+    let buttonChoose = appendToParent(divCard, 'button')
+    buttonChoose.style.width = "5rem"
+    buttonChoose.style.height = "1.5rem"
+
+    buttonChoose.onclick = () => {
+      let value = input.value
+      fetch(`http://localhost:3000/users`)
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(item => {
+            if (item.name == h3Name) {
+              arrImgHero = item.img
+            }
+            if (item.name !== value) {
+              fetch(`http://localhost:3000/users`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: value })
+              })
+            }
+          })
+        })
+
+      document.body.innerHTML = " "
+      //document.body.style.backgroundColor = "transparent"
+      game = new Game(document.body)
+
+    }
+  }
+}
+
+function user() {//выбираем игрока
+  document.body.innerHTML = " "
+  let divBig = appendBody('div')
+  divBig.style.width = "25rem"
+  divBig.style.height = "25rem"
+  divBig.style.display = "flex"
+  divBig.style.flexFlow = "row"
+
+  let arrovLeft = appendToParent(divBig, 'div')
+  arrovLeft.style.width = "5rem"
+  arrovLeft.style.height = "5rem"
+  arrovLeft.style.backgroundColor = "transparent"
+  arrovLeft.innerText = "<"
+  arrovLeft.style.marginTop = "11rem"
+
+
+
+  fetch(`http://localhost:3000/users`)
+    .then(response => { return response.json() })
+    .then(data => {
+      console.log(
+        data[0].img[0], data[0].name, data[0].discription
+      )
+      arrUsers.push(new UserChoose(divBig, data[0].img[0], data[0].name, data[0].discription))
+      arrUsers.push(new UserChoose(divBig, data[1].img[0], data[1].name, data[1].discription))
+
+    })
+  let arrovRight = appendToParent(divBig, 'div')
+  arrovRight.style.width = "5rem"
+  arrovRight.style.height = "5rem"
+  arrovRight.style.marginTop = "11rem"
+
+
+
+  arrovRight.style.backgroundColor = "transparent"
+  arrovRight.innerText = ">"
+
+  arrUsers[1].hidden()
+  arrovLeft.onclick = () => {
+    arrUsers[0].show()
+    arrUsers[1].hidden()
+    console.log('arrUsers[1].hidden() arrUsers[0].show()')
+  }
+  arrovRight.onclick = () => {
+    arrUsers[0].hidden()
+    arrUsers[1].show()
+    console.log('arrUsers[0].hidden() arrUsers[1].show()')
+
+  }
+
 
 }
+
 
 function music() {
   let music = appendBody('audio')
@@ -411,11 +507,11 @@ class Game {
 
         imgBetweenGame("https://media.giphy.com/media/4SY7hLDg6zA6bcGp4p/giphy.gif")
         try {
-          fetch(`http://localhost:3000/maketField/${Math.round(Math.random() * 10)}`)
+          fetch(`http://localhost:3000/maketField`)
             .then(response => { return response.json() })
             .then(data => {
-              data.forEach(ship => {
-                btnEnemy.push(ship1)
+              data[Math.round(Math.random() * 10)].forEach(ship => {
+                btnEnemy.push(ship)
                 getId(ship + 100).className = 'black'//здесь заполняю поле противника
               })
             })
@@ -424,7 +520,7 @@ class Game {
             .then(response => { return response.json() })
             .then(data => {
               data.forEach(ship => {
-                btnEnemy.push(ship1)
+                btnEnemy.push(ship)
                 getId(ship + 100).className = 'black'//здесь заполняю поле противника
               })
             })
@@ -439,10 +535,13 @@ class Game {
 function winner() {
   if (btnEnemy.length == 0) {
     alert('Победила Мария')
+    return true
   }
   if (btn.length == 0) {
     alert("Победил любимый Tommy")
+    return true
   }
+  return false
 }
 
 function bamb(parent) {
@@ -464,90 +563,95 @@ function bamb(parent) {
 }
 
 function shoot(num = 0) {
-  let explosion = num
 
-  if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] + 1) {  //пытаемся понять, как расположен наш подбитый корабль
-    if (looseShip.indexOf(dieShip[dieShip.length - 1] - 1) < 0) {
-      explosion = dieShip[dieShip.length - 1] - 1
-    }
-  }
-  if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] - 1) {
-    if (looseShip.indexOf(dieShip[dieShip.length - 1] + 10) < 0) {
-      explosion = dieShip[dieShip.length - 1] + 10
-    }
-  }
-  if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] + 10) {
-    if (looseShip.indexOf(dieShip[dieShip.length - 1] - 10) < 0) {
-      explosion = dieShip[dieShip.length - 1] - 10
-    }
-  }
+  if (winner()) {
+    document.body.innerHTML = " "
 
-  if (num == 0) {
-    explosion = Math.floor(Math.random() * 100)
-    console.log('explosion = Math.ceil(Math.random() * 100)   ' + explosion)
-  }
-  if (num > 99) {
-    explosion = 0
-    console.log('num > 99  ' + explosion)
-  }
+  } else {
+    let explosion = num
 
-
-  if (baBah.indexOf(explosion) < 0) {
-    baBah.push(explosion)
-    //bamb(getId('divTom'))//////////// проверить когда именно стрелять
-
-    setTimeout(() => {
-      if (btn.indexOf(explosion) > -1) {
-
-        dieShip.push(explosion)//удачный выстрел        
-        btn.splice(btn.indexOf(explosion), 1)
-        console.log(btn)
-        console.log(btnEnemy)
-        getId(explosion).style.backgroundColor = "red"
-        getId(explosion).className = "red"
-
-        ///подсчет убитого корабля
-        if (idShip1.indexOf(explosion)) {
-          idShip1.splice(idShip1.indexOf(explosion), 1)
-          imgBetweenGame("./img/3Ft.gif")//радуемся
-          // dieShip = []
-        }
-        if (idShip2.indexOf(explosion)) {
-          idShip2.splice(idShip2.indexOf(explosion), 1)
-          if (idShip2.length % 2 == 0) {
-            imgBetweenGame("./img/1mnr.gif")//радуемся
-            // dieShip = []
-          }
-        }
-        if (idShip3.indexOf(explosion)) {
-          idShip3.splice(idShip3.indexOf(explosion), 1)
-          if (idShip3.length % 3 == 0) {
-            imgBetweenGame("./img/1Xd9.gif")
-            // dieShip = []
-          }
-        }
-        if (idShip4.indexOf(explosion)) {
-          idShip4.splice(idShip4.indexOf(explosion), 1)
-          if (idShip4.length == 0) {
-            imgBetweenGame("./img/26Hj.gif")
-            // dieShip = []
-          }
-        }
-
-        shoot(dieShip[dieShip.length - 1] + 1)//////////////мы попали, идем попадать еще раз
-
-
-      } else {
-        getId(explosion).style.backgroundColor = "#00cc00"//промазали
-        looseShip.push(explosion)//wirte our loose
-        setTimeout(() => {
-          // bamb(getId('divMaria'))////////проверить когда стрелять
-        }, 2000)
+    if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] + 1) {  //пытаемся понять, как расположен наш подбитый корабль
+      if (looseShip.indexOf(dieShip[dieShip.length - 1] - 1) < 0) {
+        explosion = dieShip[dieShip.length - 1] - 1
       }
-    }, 1000)
-  }
-  else {
-    shoot()//рандом выдал такое же число, куда мы уже стреляли. поэтому опять запускаем его
+    }
+    if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] - 1) {
+      if (looseShip.indexOf(dieShip[dieShip.length - 1] + 10) < 0) {
+        explosion = dieShip[dieShip.length - 1] + 10
+      }
+    }
+    if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] + 10) {
+      if (looseShip.indexOf(dieShip[dieShip.length - 1] - 10) < 0) {
+        explosion = dieShip[dieShip.length - 1] - 10
+      }
+    }
+
+    if (num == 0) {
+      explosion = Math.floor(Math.random() * 100)
+      console.log('explosion = Math.ceil(Math.random() * 100)   ' + explosion)
+    }
+    if (num > 99) {
+      explosion = 0
+      console.log('num > 99  ' + explosion)
+    }
+
+
+    if (baBah.indexOf(explosion) < 0) {
+      baBah.push(explosion)
+      //bamb(getId('divTom'))//////////// проверить когда именно стрелять
+
+      setTimeout(() => {
+        if (btn.indexOf(explosion) > -1) {
+
+          dieShip.push(explosion)//удачный выстрел        
+          btn.splice(btn.indexOf(explosion), 1)
+
+          getId(explosion).style.backgroundColor = "red"
+          getId(explosion).className = "red"
+
+          ///подсчет убитого корабля
+          if (idShip1.indexOf(explosion) > -1) {
+            idShip1.splice(idShip1.indexOf(explosion), 1)
+            imgBetweenGame("./img/3Ft.gif")//радуемся
+            // dieShip = []
+          }
+          if (idShip2.indexOf(explosion) > -1) {
+            idShip2.splice(idShip2.indexOf(explosion), 1)
+            if (idShip2.length % 2 == 0) {
+              imgBetweenGame("./img/1mnr.gif")//радуемся
+              // dieShip = []
+            }
+          }
+          if (idShip3.indexOf(explosion) > -1) {
+            idShip3.splice(idShip3.indexOf(explosion), 1)
+            if (idShip3.length % 3 == 0) {
+              imgBetweenGame("./img/1Xd9.gif")
+              // dieShip = []
+            }
+          }
+          if (idShip4.indexOf(explosion) > -1) {
+            idShip4.splice(idShip4.indexOf(explosion), 1)
+            if (idShip4.length == 0) {
+              imgBetweenGame("./img/26Hj.gif")
+              // dieShip = []
+            }
+          }
+
+          shoot(dieShip[dieShip.length - 1] + 1)//////////////мы попали, идем попадать еще раз
+
+
+        } else {
+          getId(explosion).style.backgroundColor = "#00cc00"//промазали
+          looseShip.push(explosion)//wirte our loose
+          setTimeout(() => {
+            // bamb(getId('divMaria'))////////проверить когда стрелять
+          }, 2000)
+        }
+      }, 1000)
+    }
+    else {
+      shoot()//рандом выдал такое же число, куда мы уже стреляли. поэтому опять запускаем его
+    }
   }
 }
 
@@ -556,12 +660,11 @@ function shoot(num = 0) {
 
 
 start()
-let game = null
-setTimeout(() => {
-  document.body.innerText = ' '
-  document.body.style.backgroundColor = "transparent"
-  game = new Game(document.body)
-}, 10500)
+
+setTimeout(() => {//выбираем игрока
+  user()
+}, 10000)
+
 
 
 

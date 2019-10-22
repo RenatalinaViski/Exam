@@ -2,11 +2,14 @@
   "users": [
     {
       "name": "Captan Maria",
-      "score": "0",
-      "img": "https://media.giphy.com/media/YSYdd09OZxIgRuGVi2/giphy.gif",
-      "img1": "https://media.giphy.com/media/JUvMD9S4sA2n1Yvcra/giphy.gif",
-      "imgFk": "https://media.giphy.com/media/3og0IxSVZw4LppfhFm/giphy.gif",
-      "imgTwings": "https://media.giphy.com/media/xUPGcAiOjE7aDuvGdG/giphy.gif",
+      "time": "0",
+      "discription": "Сражалась за звание лучшего капитана всех времен. Имеет пять орденов и двеннадцать медалей. Провела команду сквозь Цунами и Айсберги",
+      "img": [
+        "https://media.giphy.com/media/YSYdd09OZxIgRuGVi2/giphy.gif",
+        "https://media.giphy.com/media/JUvMD9S4sA2n1Yvcra/giphy.gif",
+        "https://media.giphy.com/media/3og0IxSVZw4LppfhFm/giphy.gif",
+        "https://media.giphy.com/media/xUPGcAiOjE7aDuvGdG/giphy.gif"
+      ],
       "ship4": "https://media.giphy.com/media/uWzYPOrnVGNov4xiyO/giphy.gif",
       "ship3": "https://media.giphy.com/media/QZm90Rx2eivDyOO0kD/giphy.gif",
       "ship2": "https://media.giphy.com/media/d6UFCIIVZOkU0/giphy.gif",
@@ -14,8 +17,9 @@
       "id": "15"
     },
     {
-      "name": "Pirate_John",
-      "score": "0",
+      "name": "Pirate Jack",
+      "time": "0",
+      "discription": "Знаменитый, самовлюбленный и неадекватный Джек Воробей! Капитан Джек Воробей! Победил Кракуса, отвоевал свою Черную жемчужину. Продал душу дьяволу и смог улизнуть!",
       "img": [
         "https://media.giphy.com/media/ifAxWvoSLIpVTvFkFM/giphy.gif",
         "https://media.giphy.com/media/3mJpyJtGQJS5ruPlEA/giphy.gif",
@@ -33,13 +37,87 @@
     },
     {
       "name": "Enemy",
-      "img": "https://i.gifer.com/34sv.gif",
-      "imgFail": "https://i.gifer.com/2kP8.gif",
-      "imgWinMaria": "https://i.gifer.com/1Xd9.gif",
-      "imgWinPirate": "https://i.gifer.com/26Hj.gif",
-      "imgWinPirate2": "https://i.gifer.com/1mnr.gif",
+      "img": [
+        "https://i.gifer.com/34sv.gif",
+        "https://i.gifer.com/2kP8.gif",
+        "https://i.gifer.com/1Xd9.gif",
+        "https://i.gifer.com/26Hj.gif",
+        "https://i.gifer.com/1mnr.gif"
+      ],
       "ship": "https://media.giphy.com/media/Id61vXRtzj3EKLLZY4/giphy.gif",
       "id": "3"
+    },
+    {
+      "name": "",
+      "id": "S_jIxco"
+    },
+    {
+      "name": "",
+      "id": "YsMnKxh"
+    },
+    {
+      "name": "",
+      "id": "lJFB-GY"
+    },
+    {
+      "name": "",
+      "id": "rpNm9Wo"
+    },
+    {
+      "name": "",
+      "id": "BQg8nSj"
+    },
+    {
+      "name": "",
+      "id": "DSuGNWs"
+    },
+    {
+      "name": "",
+      "id": "O1_eHjb"
+    },
+    {
+      "name": "",
+      "id": "RXvP0ur"
+    },
+    {
+      "name": "Maria",
+      "id": "LPnXqY_"
+    },
+    {
+      "name": "Maria",
+      "id": "L3kV8H2"
+    },
+    {
+      "name": "Maria",
+      "id": "ex-ZYgk"
+    },
+    {
+      "name": "Maria",
+      "id": "BwIvKDH"
+    },
+    {
+      "name": "Maria",
+      "id": "pcysfXg"
+    },
+    {
+      "name": "Maria",
+      "id": "1bzlu9m"
+    },
+    {
+      "name": "Maria",
+      "id": "xgH35sL"
+    },
+    {
+      "name": "Maria",
+      "id": "MQM6VKA"
+    },
+    {
+      "name": "Maria",
+      "id": "trLXmNK"
+    },
+    {
+      "name": "Maria",
+      "id": "P3J7XzH"
     }
   ],
   "ships": [
