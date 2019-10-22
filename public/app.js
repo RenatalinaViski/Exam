@@ -200,6 +200,9 @@ class Button {
         button.style.backgroundColor = "red"
         button.className = "red"
         btnEnemy.splice(btnEnemy.indexOf(this.id), 1)
+        console.log(arrImgHero)
+        winner()
+        imgBetweenGame(arrImgHero.shift())
 
         //imgBetweenGame("https://media.giphy.com/media/xUPGcAiOjE7aDuvGdG/giphy.gif")
       }
@@ -269,8 +272,8 @@ class UserChoose {//класс для выбора игрока
   constructor(parent, imgSrc, nameCapitan, discriptionCaptan) {
 
     let divCard = appendToParent(parent, 'div')
-    this.hidden = () => divCard.style.display = "none"
-    this.show = () => divCard.style.display = "show"
+    divCard.id = 'divCard'
+
     let img = appendToParent(divCard, 'img')
     img.src = imgSrc
     img.style.width = "20rem"
@@ -293,27 +296,35 @@ class UserChoose {//класс для выбора игрока
         .then(response => response.json())
         .then(data => {
           data.forEach(item => {
-            if (item.name == h3Name) {
-              arrImgHero = item.img
-            }
+            // console.log(item.img)
+            // console.log(item.name == h3Name.value)
+            // console.log(h3Name.value)
+            // console.log(item.name)
+            item.img.forEach(picture => {
+              arrImgHero.push(picture)
+            })
+            // if (item.name == h3Name) {
+            //   arrImgHero = item.img
+            // }
             if (item.name !== value) {
-              fetch(`http://localhost:3000/users`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name: value })
-              })
+              // fetch(`http://localhost:3000/users`, {///здесь я должны была записывать юзера в таблицу
+              //   method: 'POST',
+              //   headers: {
+              //     'Content-Type': 'application/json'
+              //   },
+              //   body: JSON.stringify({ name: value })
+              // })
             }
           })
         })
 
       document.body.innerHTML = " "
-      //document.body.style.backgroundColor = "transparent"
       game = new Game(document.body)
-
     }
   }
+  hidden() { divCard.display = "none" }
+  show() { divCard.display = "block" }
+
 }
 
 function user() {//выбираем игрока
@@ -324,49 +335,45 @@ function user() {//выбираем игрока
   divBig.style.display = "flex"
   divBig.style.flexFlow = "row"
 
-  let arrovLeft = appendToParent(divBig, 'div')
+  let arrovLeft = appendToParent(divBig, 'button')
   arrovLeft.style.width = "5rem"
   arrovLeft.style.height = "5rem"
   arrovLeft.style.backgroundColor = "transparent"
   arrovLeft.innerText = "<"
   arrovLeft.style.marginTop = "11rem"
-
-
-
+  let arr = []
   fetch(`http://localhost:3000/users`)
     .then(response => { return response.json() })
     .then(data => {
-      console.log(
-        data[0].img[0], data[0].name, data[0].discription
-      )
+      console.log(data)
+      //data.forEach(item=>arr.push(item))
       arrUsers.push(new UserChoose(divBig, data[0].img[0], data[0].name, data[0].discription))
       arrUsers.push(new UserChoose(divBig, data[1].img[0], data[1].name, data[1].discription))
-
     })
-  let arrovRight = appendToParent(divBig, 'div')
+   console.log(arr[0].img)
+  // arrUsers.push(new UserChoose(divBig, arr[0].img[0], arr[0].name, arr[0].discription))
+  // arrUsers.push(new UserChoose(divBig, arr[1].img[0], arr[1].name, arr[1].discription))
+
+  let arrovRight = appendToParent(divBig, 'button')
   arrovRight.style.width = "5rem"
   arrovRight.style.height = "5rem"
   arrovRight.style.marginTop = "11rem"
-
-
+  arrovRight.style.marginRight = "1rem"
 
   arrovRight.style.backgroundColor = "transparent"
   arrovRight.innerText = ">"
 
-  arrUsers[1].hidden()
+  console.log(arrUsers[1].hidden)
+
   arrovLeft.onclick = () => {
-    arrUsers[0].show()
-    arrUsers[1].hidden()
-    console.log('arrUsers[1].hidden() arrUsers[0].show()')
+
+    console.log(arrUsers[0].show)
+    console.log(arrUsers[1].hidden)
   }
   arrovRight.onclick = () => {
     arrUsers[0].hidden()
     arrUsers[1].show()
-    console.log('arrUsers[0].hidden() arrUsers[1].show()')
-
   }
-
-
 }
 
 
@@ -486,6 +493,8 @@ class Game {
       ship3 = 0
       ship4 = 0
       if (countShip()) {//если наши кораблики в правильном количество, то можем начинать играть
+        time = new Date()
+        console.log(time)
         document.body.style.flexFlow = "row"
         document.getElementsByClassName('div-role')[0].remove()
         document.getElementsByClassName('btnStart')[0].remove()
@@ -534,11 +543,14 @@ class Game {
 
 function winner() {
   if (btnEnemy.length == 0) {
-    alert('Победила Мария')
+    let won = Date.now() - time
+    alert('Победила Мария за ' + won)
+
     return true
   }
   if (btn.length == 0) {
-    alert("Победил любимый Tommy")
+    let won = Date.now() - time
+    alert("Победил любимый Tommy за " + won)
     return true
   }
   return false
@@ -588,11 +600,9 @@ function shoot(num = 0) {
 
     if (num == 0) {
       explosion = Math.floor(Math.random() * 100)
-      console.log('explosion = Math.ceil(Math.random() * 100)   ' + explosion)
     }
     if (num > 99) {
       explosion = 0
-      console.log('num > 99  ' + explosion)
     }
 
 
