@@ -14,15 +14,17 @@
       "id": "15"
     },
     {
-      "name": "Pirate John",
+      "name": "Pirate_John",
       "score": "0",
-      "img": "https://media.giphy.com/media/ifAxWvoSLIpVTvFkFM/giphy.gif",
-      "imgRole": "https://media.giphy.com/media/3mJpyJtGQJS5ruPlEA/giphy.gif",
-      "imgMoney": "https://media.giphy.com/media/1xOPO5SVXv3fvlFfUo/giphy.gif",
-      "imgDance": "https://media.giphy.com/media/39rKsxgDbbf1qWx0YC/giphy.gif",
-      "imgHeart": "https://media.giphy.com/media/1wX7F6HHyOnqo3pxEI/giphy.gif",
-      "imgLaggage": "https://media.giphy.com/media/fXUzbOQHyr3KtJZhzi/giphy.gif",
-      "imgEasyDance": "https://media.giphy.com/media/YSqII2bIziawYn2IFc/giphy.gif",
+      "img": [
+        "https://media.giphy.com/media/ifAxWvoSLIpVTvFkFM/giphy.gif",
+        "https://media.giphy.com/media/3mJpyJtGQJS5ruPlEA/giphy.gif",
+        "https://media.giphy.com/media/1xOPO5SVXv3fvlFfUo/giphy.gif",
+        "https://media.giphy.com/media/39rKsxgDbbf1qWx0YC/giphy.gif",
+        "https://media.giphy.com/media/1wX7F6HHyOnqo3pxEI/giphy.gif",
+        "https://media.giphy.com/media/fXUzbOQHyr3KtJZhzi/giphy.gif",
+        "https://media.giphy.com/media/YSqII2bIziawYn2IFc/giphy.gif"
+      ],
       "ship4": "https://media.giphy.com/media/QyPRSQ1cmVSEw/giphy.gif",
       "ship3": "https://media.giphy.com/media/S5hCfLDrJX2rYI5rjc/source.gif",
       "ship2": "https://media.giphy.com/media/iDClePHKmkrBJ9Pkuf/source.gif",

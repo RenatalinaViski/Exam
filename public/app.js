@@ -12,6 +12,7 @@ let idShip2 = []
 let idShip3 = []
 let idShip4 = []
 let dieShip = []
+let btnEnemy = []
 let looseShip = []
 let idTransform = []
 
@@ -197,7 +198,15 @@ class Button {
       if (button.classList.contains("black")) { //если попали в противника
         button.style.backgroundColor = "red"
         button.className = "red"
-        imgBetweenGame("https://media.giphy.com/media/xUPGcAiOjE7aDuvGdG/giphy.gif")
+        btnEnemy.splice(btnEnemy.indexOf(this.id), 1)
+        
+        fetch(`http://localhost:3000/users/Pirate_John.img/${Math.round(Math.random() * 10 % 8)}`)
+          .then(response => { return response.json() })
+          .then(data => {
+            imgBetweenGame(data)             
+            })    
+
+        //imgBetweenGame("https://media.giphy.com/media/xUPGcAiOjE7aDuvGdG/giphy.gif")
       }
       if (button.className == "tr" && !this.agree) {//если промазали, передаем эстафету ему
         button.style.backgroundColor = "#009999"
@@ -401,24 +410,41 @@ class Game {
         let fieldApponent = new Field(field2, 'TomHenks', false, 100)//создали поле противника
 
         imgBetweenGame("https://media.giphy.com/media/4SY7hLDg6zA6bcGp4p/giphy.gif")
-
-        fetch(`http://localhost:3000/maketField/${Math.round(Math.random() * 10)}`)
-          .then(response => { return response.json() })
-          .then(data => {
-            data.forEach(ship => {
-              console.log(ship)
-              getId(ship + 100).className = 'black'//здесь заполняю поле противника
+        try {
+          fetch(`http://localhost:3000/maketField/${Math.round(Math.random() * 10)}`)
+            .then(response => { return response.json() })
+            .then(data => {
+              data.forEach(ship => {
+                btnEnemy.push(ship1)
+                getId(ship + 100).className = 'black'//здесь заполняю поле противника
+              })
             })
-          })
-
-
-
+        } catch{
+          fetch(`http://localhost:3000/maketField/5`)
+            .then(response => { return response.json() })
+            .then(data => {
+              data.forEach(ship => {
+                btnEnemy.push(ship1)
+                getId(ship + 100).className = 'black'//здесь заполняю поле противника
+              })
+            })
+        }
         //   ///может здесь начать стрелять? 
       }
     }
 
   }
 }
+
+function winner() {
+  if (btnEnemy.length == 0) {
+    alert('Победила Мария')
+  }
+  if (btn.length == 0) {
+    alert("Победил любимый Tommy")
+  }
+}
+
 function bamb(parent) {
   if (getId('babm') == null) {
     let imgStart = appendToParent(parent, 'img')  ///проблема теперь здесь  
@@ -438,18 +464,31 @@ function bamb(parent) {
 }
 
 function shoot(num = 0) {
+  let explosion = num
 
   if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] + 1) {  //пытаемся понять, как расположен наш подбитый корабль
-    
-    
+    if (looseShip.indexOf(dieShip[dieShip.length - 1] - 1) < 0) {
+      explosion = dieShip[dieShip.length - 1] - 1
+    }
+  }
+  if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] - 1) {
+    if (looseShip.indexOf(dieShip[dieShip.length - 1] + 10) < 0) {
+      explosion = dieShip[dieShip.length - 1] + 10
+    }
+  }
+  if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] + 10) {
+    if (looseShip.indexOf(dieShip[dieShip.length - 1] - 10) < 0) {
+      explosion = dieShip[dieShip.length - 1] - 10
+    }
   }
 
-
-  let explosion = num//id ячейки куда мы стреляем  //меняю логику, если что и это прокатит
   if (num == 0) {
-    explosion = Math.ceil(Math.random() * 100)
-  } else if (num > 99) {
+    explosion = Math.floor(Math.random() * 100)
+    console.log('explosion = Math.ceil(Math.random() * 100)   ' + explosion)
+  }
+  if (num > 99) {
     explosion = 0
+    console.log('num > 99  ' + explosion)
   }
 
 
@@ -460,48 +499,42 @@ function shoot(num = 0) {
     setTimeout(() => {
       if (btn.indexOf(explosion) > -1) {
 
-        dieShip.push(explosion)//удачный выстрел
-
+        dieShip.push(explosion)//удачный выстрел        
+        btn.splice(btn.indexOf(explosion), 1)
+        console.log(btn)
+        console.log(btnEnemy)
         getId(explosion).style.backgroundColor = "red"
         getId(explosion).className = "red"
 
         ///подсчет убитого корабля
         if (idShip1.indexOf(explosion)) {
           idShip1.splice(idShip1.indexOf(explosion), 1)
-          imgBetweenGame("https://media.giphy.com/media/YSqII2bIziawYn2IFc/giphy.gif")//радуемся
-          dieShip = []
+          imgBetweenGame("./img/3Ft.gif")//радуемся
+          // dieShip = []
         }
         if (idShip2.indexOf(explosion)) {
           idShip2.splice(idShip2.indexOf(explosion), 1)
           if (idShip2.length % 2 == 0) {
-            imgBetweenGame("https://i.gifer.com/1Xd9.gif")//радуемся
-            dieShip = []
+            imgBetweenGame("./img/1mnr.gif")//радуемся
+            // dieShip = []
           }
         }
         if (idShip3.indexOf(explosion)) {
           idShip3.splice(idShip3.indexOf(explosion), 1)
           if (idShip3.length % 3 == 0) {
-            imgBetweenGame("https://i.gifer.com/1mnr.gif")
-            dieShip = []
+            imgBetweenGame("./img/1Xd9.gif")
+            // dieShip = []
           }
         }
         if (idShip4.indexOf(explosion)) {
           idShip4.splice(idShip4.indexOf(explosion), 1)
           if (idShip4.length == 0) {
-            imgBetweenGame("https://media.giphy.com/media/1xOPO5SVXv3fvlFfUo/giphy.gif")
-            dieShip = []
+            imgBetweenGame("./img/26Hj.gif")
+            // dieShip = []
           }
         }
 
-
-        if (dieShip.length == 0) {
-          shoot(dieShip[dieShip.length - 1] + 1)//////////////мы попали, идем попадать еще раз
-        }
-
-
-        
-
-
+        shoot(dieShip[dieShip.length - 1] + 1)//////////////мы попали, идем попадать еще раз
 
 
       } else {
@@ -516,7 +549,6 @@ function shoot(num = 0) {
   else {
     shoot()//рандом выдал такое же число, куда мы уже стреляли. поэтому опять запускаем его
   }
-
 }
 
 
