@@ -11,6 +11,8 @@ let idShip1 = []
 let idShip2 = []
 let idShip3 = []
 let idShip4 = []
+let dieShip = []
+let looseShip = []
 let idTransform = []
 
 
@@ -192,7 +194,7 @@ class Button {
     this.y = button.y
     this.agree = bool//это признак моего поля, если false то это противник   
     button.onclick = () => {
-      if (button.classList.contains("bk")) { //если попали в противника
+      if (button.classList.contains("black")) { //если попали в противника
         button.style.backgroundColor = "red"
         button.className = "red"
         imgBetweenGame("https://media.giphy.com/media/xUPGcAiOjE7aDuvGdG/giphy.gif")
@@ -323,18 +325,21 @@ function role(parent) {
 }
 
 function imgBetweenGame(pathImg) {
-  let imgStart = appendToParent(getId('divGif'), 'img')
-  imgStart.src = pathImg
-  imgStart.style.width = "20rem"
-  imgStart.style.height = "20rem"
-  imgStart.style.marginTop = "5rem"
-  imgStart.style.marginLeft = "-6rem"
-  imgStart.id = "imgStart"
-  setTimeout(() => {
-    getId('imgStart').remove()//удаляем прыгающую картинку
-  }, 4000)
-
+  if (getId("imgStart") == null) {
+    let imgStart = appendToParent(getId('divGif'), 'img')
+    imgStart.src = pathImg
+    imgStart.style.width = "20rem"
+    imgStart.style.height = "25rem"
+    imgStart.style.marginTop = "5rem"
+    imgStart.style.marginLeft = "-6rem"
+    imgStart.id = "imgStart"
+    setTimeout(() => {
+      getId('imgStart').remove()//удаляем прыгающую картинку
+    }, 4000)
+  }
 }
+
+
 
 class Game {
   constructor(parent) {
@@ -348,6 +353,7 @@ class Game {
 
     role(divContainer)
     let divMaria = appendToParent(divContainer, 'div')
+    divMaria.id = "divMaria"
     let field = appendToParent(divMaria, 'div')
     field.style.height = "500px"
     field.style.width = "500px"
@@ -385,8 +391,9 @@ class Game {
 
         })
 
+
         let field2 = appendToParent(divContainer, 'div')
-        field2.id = 'Tom'
+        field2.id = 'divTom'
         field2.style.height = "500px"
         field2.style.width = "500px"
         field2.style.display = "flex"
@@ -395,9 +402,16 @@ class Game {
 
         imgBetweenGame("https://media.giphy.com/media/4SY7hLDg6zA6bcGp4p/giphy.gif")
 
-        for (let i = 0; i < btn.length; i++) {
-          getId(btn[i] + 100).className = 'bk' //здесь заполняю поле противника
-        }
+        fetch(`http://localhost:3000/maketField/${Math.round(Math.random() * 10)}`)
+          .then(response => { return response.json() })
+          .then(data => {
+            data.forEach(ship => {
+              console.log(ship)
+              getId(ship + 100).className = 'black'//здесь заполняю поле противника
+            })
+          })
+
+
 
         //   ///может здесь начать стрелять? 
       }
@@ -405,56 +419,97 @@ class Game {
 
   }
 }
-// function showEnemy(pathImg) {
-//   let imgStart = appendToParent(document.body, 'img')  ///проблема теперь здесь 
-//   //imgStart.src = "https://i.gifer.com/1mnr.gif"
-//   imgStart.src = pathImg
-//   imgStart.style.width = "20rem"
-//   imgStart.style.height = "20rem"
-//   imgStart.style.marginTop = "-5rem"
-//   imgStart.style.marginLeft = "9rem"
-//   imgStart.style.color = "#454545"
-//   imgStart.id = "imgEnemy"
-// }
+function bamb(parent) {
+  if (getId('babm') == null) {
+    let imgStart = appendToParent(parent, 'img')  ///проблема теперь здесь  
+    imgStart.src = "https://media.giphy.com/media/lngI73XhH8YwV9iPZK/giphy.gif"
+    imgStart.style.width = "20rem"
+    imgStart.style.height = "20rem"
+    imgStart.style.marginTop = "0rem"
+    imgStart.style.marginLeft = "0rem"
+    imgStart.id = "bamb"
+    if (parent == getId('divTom')) {
+      imgStart.style.transform = "rotate(180deg)"////////исправить 
+    }
+    setTimeout(() => {
+      getId('bamb').remove()
+    }, 1000)
+  }
+}
 
 function shoot(num = 0) {
-  let explosion = num
+
+  if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] + 1) {  //пытаемся понять, как расположен наш подбитый корабль
+    
+    
+  }
+
+
+  let explosion = num//id ячейки куда мы стреляем  //меняю логику, если что и это прокатит
   if (num == 0) {
-    explosion = Math.round(Math.random() * 100)
+    explosion = Math.ceil(Math.random() * 100)
   } else if (num > 99) {
     explosion = 0
   }
+
+
   if (baBah.indexOf(explosion) < 0) {
     baBah.push(explosion)
+    //bamb(getId('divTom'))//////////// проверить когда именно стрелять
+
     setTimeout(() => {
       if (btn.indexOf(explosion) > -1) {
-        imgBetweenGame("https://media.giphy.com/media/YSqII2bIziawYn2IFc/giphy.gif")
+
+        dieShip.push(explosion)//удачный выстрел
 
         getId(explosion).style.backgroundColor = "red"
         getId(explosion).className = "red"
+
         ///подсчет убитого корабля
         if (idShip1.indexOf(explosion)) {
           idShip1.splice(idShip1.indexOf(explosion), 1)
+          imgBetweenGame("https://media.giphy.com/media/YSqII2bIziawYn2IFc/giphy.gif")//радуемся
+          dieShip = []
         }
         if (idShip2.indexOf(explosion)) {
           idShip2.splice(idShip2.indexOf(explosion), 1)
+          if (idShip2.length % 2 == 0) {
+            imgBetweenGame("https://i.gifer.com/1Xd9.gif")//радуемся
+            dieShip = []
+          }
         }
         if (idShip3.indexOf(explosion)) {
           idShip3.splice(idShip3.indexOf(explosion), 1)
+          if (idShip3.length % 3 == 0) {
+            imgBetweenGame("https://i.gifer.com/1mnr.gif")
+            dieShip = []
+          }
         }
         if (idShip4.indexOf(explosion)) {
-          ///если idShip4%4==0 /// картика бегающего радующегося
-          //let put=getId('Maria')        
           idShip4.splice(idShip4.indexOf(explosion), 1)
+          if (idShip4.length == 0) {
+            imgBetweenGame("https://media.giphy.com/media/1xOPO5SVXv3fvlFfUo/giphy.gif")
+            dieShip = []
+          }
         }
 
-        // if (getId('imgStart') != null) {
-        //   getId('imgStart').remove()
-        // }
-        shoot(explosion + 1)//////////////мы попали, идем попадать еще раз
+
+        if (dieShip.length == 0) {
+          shoot(dieShip[dieShip.length - 1] + 1)//////////////мы попали, идем попадать еще раз
+        }
+
+
+        
+
+
+
 
       } else {
         getId(explosion).style.backgroundColor = "#00cc00"//промазали
+        looseShip.push(explosion)//wirte our loose
+        setTimeout(() => {
+          // bamb(getId('divMaria'))////////проверить когда стрелять
+        }, 2000)
       }
     }, 1000)
   }
@@ -496,3 +551,12 @@ setTimeout(() => {
 //       console.log(response.json())
 //     })
 // }
+
+
+
+
+
+
+
+
+
