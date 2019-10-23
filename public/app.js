@@ -201,7 +201,7 @@ class Button {
         button.className = "red"
         btnEnemy.splice(btnEnemy.indexOf(this.id), 1)
         winner()
-        imgBetweenGame(arrImgHero[Math.round(Math.random() * 10 % 8)])
+        imgBetweenGame(arrImgHero[Math.round(Math.random() * 10 % 7)])
       }
       if (button.className == "tr" && !this.agree) {//если промазали, передаем эстафету ему
         button.style.backgroundColor = "#009999"
@@ -235,6 +235,7 @@ class Button {
       }
     }
     button.oncontextmenu = (event) => {//метка на поле
+      event.preventDefault()
       if (!this.agree) {
         button.style.backgroundColor = "#1a53ff"
         button.style.border = "1px solid black"
@@ -457,7 +458,7 @@ function imgBetweenGame(pathImg) {
     }, 4000)
   }
 }catch{
-  
+
 }
 }
 
@@ -595,6 +596,7 @@ function end() {
 
 function winner() {
   if (btnEnemy.length == 0) {
+    setTimeout(()=>{
     end()
     let won = (Date.now() - time) / 360
     let h1 = appendBody('h1')
@@ -603,14 +605,17 @@ function winner() {
     writeResult(won)
 
     return true
+  },2000)
   }
   if (btn.length == 0) {
+    setTimeout(()=>{
     end()
     let won = (Date.now() - time) / 360
     let h1 = appendBody('h1')
     h1.innerText = `Победил любимый Tommy! Выиграла за   ${Math.round(won)}секунд`
     music()
     return true
+  },2000)
   }
   return false
 }
@@ -642,7 +647,7 @@ function shoot(num = 0) {
 
   } else {
     let explosion = num
-    if (notLoose > 3) {
+    if (notLoose > 2) {
       explosion = +btn[0]
       //console.log('explosion=btn[previous] ' + explosion + 'previous' + previous)
     } else {
