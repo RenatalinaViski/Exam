@@ -1,7 +1,7 @@
 let appendBody = (node) => document.body.appendChild(document.createElement(node))
 let appendToParent = (parent, node) => parent.appendChild(document.createElement(node))
 let getId = (id) => document.getElementById(id)
-let btn = []
+let btn = []//массив своих кораблей
 let baBah = []
 let ship1 = 0
 let ship2 = 0
@@ -11,14 +11,19 @@ let idShip1 = []
 let idShip2 = []
 let idShip3 = []
 let idShip4 = []
-let dieShip = []
-let btnEnemy = []
-let looseShip = []
+let dieShip = []//попавшие выстрелы
+let btnEnemy = []//список кораблей противника
+let looseShip = []//промахи
 let idTransform = []
-let arrImgHero = []
-let arrUsers = []
+let arrBoatUsers = []//массив караблей картинок
+let arrBoatEnemy = []//картинки врага
+let arrImgHero = []//массив картинок веселых капитанов
+let arrUsers = []//массив капитанов
+let nameUser=null
 let game = null
 let time = null
+let previous=0//предидущий индекс
+let notLoose=0//промахи на счет 3
 
 function control(button) {
   if (getId(+button.id + 11).classList.contains('tr') && getId(+button.id + 9).classList.contains('tr')) {
@@ -78,14 +83,12 @@ function sortBtn(arr) {
   let newArr = []
   for (let i = 0; i < arr.length - 1; i++) {
     for (let g = i; g < arr.length - 1; g++) {
-
       if (arr[i] > arr[g + 1]) {
         num = arr[g + 1]
         arr[g + 1] = arr[i]
         arr[i] = num
         num = 0
       }
-
     }
     newArr.push(arr[i])
   }
@@ -200,11 +203,8 @@ class Button {
         button.style.backgroundColor = "red"
         button.className = "red"
         btnEnemy.splice(btnEnemy.indexOf(this.id), 1)
-        console.log(arrImgHero)
         winner()
-        imgBetweenGame(arrImgHero.shift())
-
-        //imgBetweenGame("https://media.giphy.com/media/xUPGcAiOjE7aDuvGdG/giphy.gif")
+        imgBetweenGame(arrImgHero[Math.round(Math.random() * 10 % 8)])
       }
       if (button.className == "tr" && !this.agree) {//если промазали, передаем эстафету ему
         button.style.backgroundColor = "#009999"
@@ -264,21 +264,20 @@ class Field {
       }
     }
   }
-
 }
 
 
 class UserChoose {//класс для выбора игрока
   constructor(parent, imgSrc, nameCapitan, discriptionCaptan) {
 
-    let divCard = appendToParent(parent, 'div')
-    divCard.id = 'divCard'
+    this.divCard = appendToParent(parent, 'div')
+    this.divCard.id = 'divCard'
 
-    let img = appendToParent(divCard, 'img')
+    let img = appendToParent(this.divCard, 'img')
     img.src = imgSrc
     img.style.width = "20rem"
     img.style.height = "20rem"
-    let divDiscription = appendToParent(divCard, 'div')
+    let divDiscription = appendToParent(this.divCard, 'div')
     let input = appendToParent(divDiscription, 'input')
 
     let h3Name = appendToParent(divDiscription, 'h3')
@@ -286,45 +285,55 @@ class UserChoose {//класс для выбора игрока
     let pDiscription = appendToParent(divDiscription, 'p')
     pDiscription.innerText = discriptionCaptan
 
-    let buttonChoose = appendToParent(divCard, 'button')
+    let buttonChoose = appendToParent(this.divCard, 'button')
     buttonChoose.style.width = "5rem"
     buttonChoose.style.height = "1.5rem"
+    buttonChoose.innerText = "Выбрать"
+    buttonChoose.id="buttonChoose"
 
     buttonChoose.onclick = () => {
       let value = input.value
+      nameUser=nameCapitan
       fetch(`http://localhost:3000/users`)
         .then(response => response.json())
         .then(data => {
           data.forEach(item => {
-            // console.log(item.img)
-            // console.log(item.name == h3Name.value)
-            // console.log(h3Name.value)
-            // console.log(item.name)
-            item.img.forEach(picture => {
-              arrImgHero.push(picture)
-            })
-            // if (item.name == h3Name) {
-            //   arrImgHero = item.img
-            // }
-            if (item.name !== value) {
-              // fetch(`http://localhost:3000/users`, {///здесь я должны была записывать юзера в таблицу
-              //   method: 'POST',
-              //   headers: {
-              //     'Content-Type': 'application/json'
-              //   },
-              //   body: JSON.stringify({ name: value })
-              // })
+            if (item.name == nameCapitan) {
+              item.img.forEach(picture => {
+                arrImgHero.push(picture)
+              })
+              item.ship.forEach(boat => {
+                arrBoatUsers.push(boat)
+              })
             }
           })
         })
 
+      fetch(`http://localhost:3000/users`, {///здесь я должны была записывать юзера в таблицу
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name: value })
+      })
+
       document.body.innerHTML = " "
-      game = new Game(document.body)
+      showEnemy()
     }
   }
-  hidden() { divCard.display = "none" }
-  show() { divCard.display = "block" }
+}
 
+function showEnemy(parent){
+
+let enemy=new UserChoose(document.body,arrBoatEnemy[0].img[0], arrBoatEnemy[0].name, arrBoatEnemy[0].discription)  ///
+document.getElementsByTagName('input')[0].remove()
+document.getElementsByTagName('button')[0].remove()
+
+        setTimeout(()=>{
+          document.body.innerHTML = " "
+           game = new Game(document.body)      /////
+        },10000)
+       
 }
 
 function user() {//выбираем игрока
@@ -341,18 +350,16 @@ function user() {//выбираем игрока
   arrovLeft.style.backgroundColor = "transparent"
   arrovLeft.innerText = "<"
   arrovLeft.style.marginTop = "11rem"
+
   let arr = []
   fetch(`http://localhost:3000/users`)
     .then(response => { return response.json() })
     .then(data => {
-      console.log(data)
-      //data.forEach(item=>arr.push(item))
       arrUsers.push(new UserChoose(divBig, data[0].img[0], data[0].name, data[0].discription))
       arrUsers.push(new UserChoose(divBig, data[1].img[0], data[1].name, data[1].discription))
+      arrBoatEnemy.push(data[2])      
+      arrUsers[1].divCard.style.display = "none"
     })
-   console.log(arr[0].img)
-  // arrUsers.push(new UserChoose(divBig, arr[0].img[0], arr[0].name, arr[0].discription))
-  // arrUsers.push(new UserChoose(divBig, arr[1].img[0], arr[1].name, arr[1].discription))
 
   let arrovRight = appendToParent(divBig, 'button')
   arrovRight.style.width = "5rem"
@@ -363,16 +370,13 @@ function user() {//выбираем игрока
   arrovRight.style.backgroundColor = "transparent"
   arrovRight.innerText = ">"
 
-  console.log(arrUsers[1].hidden)
-
   arrovLeft.onclick = () => {
-
-    console.log(arrUsers[0].show)
-    console.log(arrUsers[1].hidden)
+    arrUsers[0].divCard.style.display = "block"
+    arrUsers[1].divCard.style.display = "none"
   }
   arrovRight.onclick = () => {
-    arrUsers[0].hidden()
-    arrUsers[1].show()
+    arrUsers[0].divCard.style.display = "none"
+    arrUsers[1].divCard.style.display = "block"
   }
 }
 
@@ -452,18 +456,37 @@ function imgBetweenGame(pathImg) {
 }
 
 
+function boatImgDown(parent, idShip, pathImg, ...arr) {
+  for (let i = 0; i < 4; i++) {
+    let imgStart = appendToParent(parent, 'img')
+    imgStart.src = pathImg[i]
+    imgStart.style.width = `${i + 3}rem`
+    imgStart.style.height = `${i + 3}rem`
+    imgStart.style.marginTop = "0"
+    imgStart.style.marginLeft = "0rem"
+    imgStart.id = `${idShip}${i}`
+    let p = appendToParent(parent, 'p')
+    p.innerText = arr[i]
+  }
+}
 
 class Game {
   constructor(parent) {
     document.body.style.background = "url('./img/1.jpg')"
     document.body.style.display = "flex"
-    document.body.style.flexFlow = "column"
+    document.body.style.flexFlow = "column"    
 
     let divContainer = appendBody('div')
     divContainer.style.display = "flex"
     divContainer.style.flexFlow = "row"
 
+    let divShip=appendBody('div')
+    divShip.style.display='flex'
+    let divShipMari=appendToParent(divShip,'div')
+    let divShipEnemy=appendToParent(divShip,'div')
+
     role(divContainer)
+
     let divMaria = appendToParent(divContainer, 'div')
     divMaria.id = "divMaria"
     let field = appendToParent(divMaria, 'div')
@@ -502,9 +525,9 @@ class Game {
         fieldMaria.button.forEach(item => {//что бы не мог в период игры делать новые корабли
           getId(item.id).onclick = null
           getId(item.id).ondblclick = null
-
         })
 
+        boatImgDown(divShipMari, 'Mari',arrBoatUsers,ship1,ship2,ship3,ship4)/////////////////////////
 
         let field2 = appendToParent(divContainer, 'div')
         field2.id = 'divTom'
@@ -518,12 +541,17 @@ class Game {
         try {
           fetch(`http://localhost:3000/maketField`)
             .then(response => { return response.json() })
-            .then(data => {
+            .then(data => {              
               data[Math.round(Math.random() * 10)].forEach(ship => {
-                btnEnemy.push(ship)
+                btnEnemy.push(ship)/////////////////////////////////////////////////////////////////добавлю вытащить айди кораблей
                 getId(ship + 100).className = 'black'//здесь заполняю поле противника
               })
+              console.log(btnEnemy)
+
             })
+           // boatImgDown(divShipEnemy, 'Tom',arrBoatUsers,ship1,ship2,ship3,ship4)
+           ////countShip()
+
         } catch{
           fetch(`http://localhost:3000/maketField/5`)
             .then(response => { return response.json() })
@@ -534,23 +562,48 @@ class Game {
               })
             })
         }
-        //   ///может здесь начать стрелять? 
       }
     }
 
   }
 }
+function writeResult(winTime){
+  fetch(`http://localhost:3000/users/${nameUser}`, {///здесь я должны была записывать юзера в таблицу
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ name: nameUser, time: winTime})
+})
+}
+function end() {
+  document.body.innerHTML = " "
+  let imgStart = appendBody('img')
+  imgStart.src = "https://media.giphy.com/media/2aUG7TvmWjYCmc8nBs/giphy.gif"
+  imgStart.style.width = "20rem"
+  imgStart.style.height = "20rem"
+  imgStart.style.marginTop = "0rem"
+  imgStart.style.marginLeft = "0rem"
+  imgStart.id = "theEnd"
+}
 
 function winner() {
   if (btnEnemy.length == 0) {
-    let won = Date.now() - time
-    alert('Победила Мария за ' + won)
+    end()
+    let won = (Date.now() - time) / 360
+    let h1 = appendBody('h1')
+    h1.innerText = `Победила ${nameUser}! Выиграла за  ${Math.round(won)}секунд`
+    music()
+    writeResult(won)
 
     return true
   }
   if (btn.length == 0) {
-    let won = Date.now() - time
-    alert("Победил любимый Tommy за " + won)
+    end()
+    let won = (Date.now() - time) / 360
+    let h1 = appendBody('h1')
+    h1.innerText = `Победил любимый Tommy! Выиграла за   ${Math.round(won)}секунд`
+    music()
     return true
   }
   return false
@@ -574,46 +627,38 @@ function bamb(parent) {
   }
 }
 
+//let previous=null//предидущий индекс
+//let notLoose=null//промахи на счет 3
+
 function shoot(num = 0) {
 
   if (winner()) {
-    document.body.innerHTML = " "
 
   } else {
     let explosion = num
-
-    if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] + 1) {  //пытаемся понять, как расположен наш подбитый корабль
-      if (looseShip.indexOf(dieShip[dieShip.length - 1] - 1) < 0) {
-        explosion = dieShip[dieShip.length - 1] - 1
-      }
-    }
-    if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] - 1) {
-      if (looseShip.indexOf(dieShip[dieShip.length - 1] + 10) < 0) {
-        explosion = dieShip[dieShip.length - 1] + 10
-      }
-    }
-    if (looseShip[looseShip.length - 1] == dieShip[dieShip.length - 1] + 10) {
-      if (looseShip.indexOf(dieShip[dieShip.length - 1] - 10) < 0) {
-        explosion = dieShip[dieShip.length - 1] - 10
-      }
-    }
-
+    console.log(notLoose)
+    if(notLoose>2){      
+      explosion=+btn[0]
+      notLoose=0
+      //console.log('explosion=btn[previous] ' + explosion + 'previous' + previous)
+    }else{
     if (num == 0) {
       explosion = Math.floor(Math.random() * 100)
     }
     if (num > 99) {
       explosion = 0
     }
-
-
+  }
     if (baBah.indexOf(explosion) < 0) {
       baBah.push(explosion)
-      //bamb(getId('divTom'))//////////// проверить когда именно стрелять
 
       setTimeout(() => {
         if (btn.indexOf(explosion) > -1) {
 
-          dieShip.push(explosion)//удачный выстрел        
+          dieShip.push(explosion)//удачный выстрел   
+          //previous=+btn.indexOf(explosion)//индекс удачного выстрела
+          console.log(notLoose)
+
           btn.splice(btn.indexOf(explosion), 1)
 
           getId(explosion).style.backgroundColor = "red"
@@ -623,39 +668,32 @@ function shoot(num = 0) {
           if (idShip1.indexOf(explosion) > -1) {
             idShip1.splice(idShip1.indexOf(explosion), 1)
             imgBetweenGame("./img/3Ft.gif")//радуемся
-            // dieShip = []
           }
           if (idShip2.indexOf(explosion) > -1) {
             idShip2.splice(idShip2.indexOf(explosion), 1)
             if (idShip2.length % 2 == 0) {
               imgBetweenGame("./img/1mnr.gif")//радуемся
-              // dieShip = []
             }
           }
           if (idShip3.indexOf(explosion) > -1) {
             idShip3.splice(idShip3.indexOf(explosion), 1)
             if (idShip3.length % 3 == 0) {
               imgBetweenGame("./img/1Xd9.gif")
-              // dieShip = []
             }
           }
           if (idShip4.indexOf(explosion) > -1) {
             idShip4.splice(idShip4.indexOf(explosion), 1)
             if (idShip4.length == 0) {
               imgBetweenGame("./img/26Hj.gif")
-              // dieShip = []
             }
           }
-
-          shoot(dieShip[dieShip.length - 1] + 1)//////////////мы попали, идем попадать еще раз
-
+          notLoose=0
+          shoot(dieShip[dieShip.length - 1] + 1)//мы попали, идем попадать еще раз
 
         } else {
           getId(explosion).style.backgroundColor = "#00cc00"//промазали
           looseShip.push(explosion)//wirte our loose
-          setTimeout(() => {
-            // bamb(getId('divMaria'))////////проверить когда стрелять
-          }, 2000)
+          notLoose++
         }
       }, 1000)
     }
@@ -664,8 +702,6 @@ function shoot(num = 0) {
     }
   }
 }
-
-
 
 
 
