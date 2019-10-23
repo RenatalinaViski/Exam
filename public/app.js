@@ -19,11 +19,11 @@ let arrBoatUsers = []//массив караблей картинок
 let arrBoatEnemy = []//картинки врага
 let arrImgHero = []//массив картинок веселых капитанов
 let arrUsers = []//массив капитанов
-let nameUser=null
+let nameUser = null
 let game = null
 let time = null
-let previous=0//предидущий индекс
-let notLoose=0//промахи на счет 3
+let previous = 0//предидущий индекс
+let notLoose = 0//промахи на счет 3
 
 function control(button) {
   if (getId(+button.id + 11).classList.contains('tr') && getId(+button.id + 9).classList.contains('tr')) {
@@ -164,7 +164,6 @@ function controlShip() {
         idShip4.push(+arrBoat[i - 1])
         idShip4.push(+arrBoat[i])
       }
-
       count = 1
     }
   }
@@ -175,9 +174,7 @@ function countShip() {
   if (ship1 > 4 || ship1 < 4 || ship2 > 3 || ship2 < 3 || ship3 > 2 || ship3 < 2 || ship4 > 1 || ship4 < 1) {
     alert("Прошу придерживаться правил и выбрать допустимое количество кораблей")
     console.log(`ship1=${ship1}, ship2=${ship2},ship3=${ship3}, ship4=${ship4}`)
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //return false
-    return true
+    return false
   }
   return true
 }
@@ -289,11 +286,11 @@ class UserChoose {//класс для выбора игрока
     buttonChoose.style.width = "5rem"
     buttonChoose.style.height = "1.5rem"
     buttonChoose.innerText = "Выбрать"
-    buttonChoose.id="buttonChoose"
+    buttonChoose.id = "buttonChoose"
 
     buttonChoose.onclick = () => {
       let value = input.value
-      nameUser=nameCapitan
+      nameUser = value
       fetch(`http://localhost:3000/users`)
         .then(response => response.json())
         .then(data => {
@@ -316,24 +313,29 @@ class UserChoose {//класс для выбора игрока
         },
         body: JSON.stringify({ name: value })
       })
-
       document.body.innerHTML = " "
       showEnemy()
     }
   }
 }
 
-function showEnemy(parent){
+function showEnemy(parent) {
+  document.body.style.display = "flex"
+  document.body.style.flexFlow = "column"
+  let h1 = appendBody('h1')
+  h1.innerText = "Ваш противник"
+  h1.style.fontFamily = "fantasy"
+  h1.style.textShadow = "1px 1px rgb(227, 180, 140)"
+  h1.style.color = "brown"
+  let enemy = new UserChoose(document.body, arrBoatEnemy[0].img[0], arrBoatEnemy[0].name, arrBoatEnemy[0].discription)  ///
+  document.getElementsByTagName('input')[0].remove()
+  document.getElementsByTagName('button')[0].remove()
 
-let enemy=new UserChoose(document.body,arrBoatEnemy[0].img[0], arrBoatEnemy[0].name, arrBoatEnemy[0].discription)  ///
-document.getElementsByTagName('input')[0].remove()
-document.getElementsByTagName('button')[0].remove()
+  setTimeout(() => {
+    document.body.innerHTML = " "
+    game = new Game(document.body)
+  }, 7000)
 
-        setTimeout(()=>{
-          document.body.innerHTML = " "
-           game = new Game(document.body)      /////
-        },10000)
-       
 }
 
 function user() {//выбираем игрока
@@ -357,7 +359,7 @@ function user() {//выбираем игрока
     .then(data => {
       arrUsers.push(new UserChoose(divBig, data[0].img[0], data[0].name, data[0].discription))
       arrUsers.push(new UserChoose(divBig, data[1].img[0], data[1].name, data[1].discription))
-      arrBoatEnemy.push(data[2])      
+      arrBoatEnemy.push(data[2])
       arrUsers[1].divCard.style.display = "none"
     })
 
@@ -457,6 +459,7 @@ function imgBetweenGame(pathImg) {
 
 
 function boatImgDown(parent, idShip, pathImg, ...arr) {
+  parent.innerHTML=" "
   for (let i = 0; i < 4; i++) {
     let imgStart = appendToParent(parent, 'img')
     imgStart.src = pathImg[i]
@@ -474,16 +477,17 @@ class Game {
   constructor(parent) {
     document.body.style.background = "url('./img/1.jpg')"
     document.body.style.display = "flex"
-    document.body.style.flexFlow = "column"    
+    document.body.style.flexFlow = "column"
 
     let divContainer = appendBody('div')
     divContainer.style.display = "flex"
     divContainer.style.flexFlow = "row"
 
-    let divShip=appendBody('div')
-    divShip.style.display='flex'
-    let divShipMari=appendToParent(divShip,'div')
-    let divShipEnemy=appendToParent(divShip,'div')
+    let divShip = appendBody('div')
+    divShip.style.display = 'flex'
+    let divShipMari = appendToParent(divShip, 'div')
+    divShipMari.id = "divShipMari"
+    let divShipEnemy = appendToParent(divShip, 'div')
 
     role(divContainer)
 
@@ -527,7 +531,7 @@ class Game {
           getId(item.id).ondblclick = null
         })
 
-        boatImgDown(divShipMari, 'Mari',arrBoatUsers,ship1,ship2,ship3,ship4)/////////////////////////
+        boatImgDown(getId('divShipMari'), 'Mari', arrBoatUsers, ship1, ship2, ship3, ship4)/////////////////////////
 
         let field2 = appendToParent(divContainer, 'div')
         field2.id = 'divTom'
@@ -541,7 +545,7 @@ class Game {
         try {
           fetch(`http://localhost:3000/maketField`)
             .then(response => { return response.json() })
-            .then(data => {              
+            .then(data => {
               data[Math.round(Math.random() * 10)].forEach(ship => {
                 btnEnemy.push(ship)/////////////////////////////////////////////////////////////////добавлю вытащить айди кораблей
                 getId(ship + 100).className = 'black'//здесь заполняю поле противника
@@ -549,8 +553,6 @@ class Game {
               console.log(btnEnemy)
 
             })
-           // boatImgDown(divShipEnemy, 'Tom',arrBoatUsers,ship1,ship2,ship3,ship4)
-           ////countShip()
 
         } catch{
           fetch(`http://localhost:3000/maketField/5`)
@@ -567,14 +569,14 @@ class Game {
 
   }
 }
-function writeResult(winTime){
+function writeResult(winTime) {
   fetch(`http://localhost:3000/users/${nameUser}`, {///здесь я должны была записывать юзера в таблицу
-  method: 'PUT',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({ name: nameUser, time: winTime})
-})
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name: nameUser, time: winTime })
+  })
 }
 function end() {
   document.body.innerHTML = " "
@@ -636,19 +638,17 @@ function shoot(num = 0) {
 
   } else {
     let explosion = num
-    console.log(notLoose)
-    if(notLoose>2){      
-      explosion=+btn[0]
-      notLoose=0
+    if (notLoose > 3) {
+      explosion = +btn[0]
       //console.log('explosion=btn[previous] ' + explosion + 'previous' + previous)
-    }else{
-    if (num == 0) {
-      explosion = Math.floor(Math.random() * 100)
+    } else {
+      if (num == 0) {
+        explosion = Math.floor(Math.random() * 100)
+      }
+      if (num > 99) {
+        explosion = 0
+      }
     }
-    if (num > 99) {
-      explosion = 0
-    }
-  }
     if (baBah.indexOf(explosion) < 0) {
       baBah.push(explosion)
 
@@ -668,26 +668,32 @@ function shoot(num = 0) {
           if (idShip1.indexOf(explosion) > -1) {
             idShip1.splice(idShip1.indexOf(explosion), 1)
             imgBetweenGame("./img/3Ft.gif")//радуемся
+            --ship1
           }
           if (idShip2.indexOf(explosion) > -1) {
             idShip2.splice(idShip2.indexOf(explosion), 1)
             if (idShip2.length % 2 == 0) {
               imgBetweenGame("./img/1mnr.gif")//радуемся
+              --ship2
             }
           }
           if (idShip3.indexOf(explosion) > -1) {
             idShip3.splice(idShip3.indexOf(explosion), 1)
             if (idShip3.length % 3 == 0) {
               imgBetweenGame("./img/1Xd9.gif")
+              --ship3
             }
           }
           if (idShip4.indexOf(explosion) > -1) {
             idShip4.splice(idShip4.indexOf(explosion), 1)
             if (idShip4.length == 0) {
               imgBetweenGame("./img/26Hj.gif")
+              --ship4
             }
           }
-          notLoose=0
+
+          boatImgDown(getId('divShipMari'), 'Mari', arrBoatUsers, ship1, ship2, ship3, ship4)
+          notLoose = 0
           shoot(dieShip[dieShip.length - 1] + 1)//мы попали, идем попадать еще раз
 
         } else {
