@@ -443,6 +443,7 @@ function role(parent) {
 }
 
 function imgBetweenGame(pathImg) {
+  try{
   if (getId("imgStart") == null) {
     let imgStart = appendToParent(getId('divGif'), 'img')
     imgStart.src = pathImg
@@ -455,6 +456,9 @@ function imgBetweenGame(pathImg) {
       getId('imgStart').remove()//удаляем прыгающую картинку
     }, 4000)
   }
+}catch{
+  
+}
 }
 
 
